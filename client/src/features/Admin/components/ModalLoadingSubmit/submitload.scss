@@ -1,0 +1,37 @@
+.ld-modal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+
+    &__bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    & .ld-content {
+        position: absolute;
+        top: 200px;
+        left: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 100px;
+        background: #fff;
+        border-radius: 10px;
+        z-index: 10;
+        color: var(--color-layout);
+        box-shadow: 1px 1px 20px rgba(0, 0, 0, .2);
+
+        & .ld-modal__text {
+            font-size: 20px;
+            font-weight: 300;
+            margin-top: 20px;
+            user-select: none;
+        }
+    }
+}

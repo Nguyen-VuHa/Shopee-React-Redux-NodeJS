@@ -1,0 +1,239 @@
+
+
+.productUD {
+    width: 100%;
+    height: 100%;
+    background: #f0f4f7;
+
+    &__content {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding-top: 30px;
+        padding-bottom: 20px;
+
+        & .productUD__left {
+            width: 70%;
+            height: 100%;
+            padding-right: 20px;
+            color: #51626e;
+
+            & .group__pd-photo {
+                background: #fff;
+               
+                border-radius: 10px;
+                padding: 15px 10px;
+
+                &__header {
+                    border-bottom: 1px solid #dfe5eb;
+                    font-family: 'Roboto', sans-serif;
+                    padding: 5px 0 20px 15px;
+                }
+
+                &__content {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    & .image-pd-update {
+                        position: relative;
+                        cursor: pointer;
+                        width: 216px;
+                        height: 216px;
+                        overflow: hidden;
+                        margin: 10px;
+                        border-radius: 10px;
+                        box-shadow: 0 0 15px 0 rgba(22, 45, 60, 0.1);
+
+                        & .btn-close {
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            margin-top: 10px;
+                            margin-right: 10px;
+                        }
+    
+                        & img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            object-position: center;
+                        }
+
+                        & .pd-dialog {
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            & .btn-dialog {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                width: 40px;
+                                height: 40px;
+                                font-size: 30px;
+                                border-radius: 50%;
+                                transform: rotate(0deg);
+                                transition: transform .6s ease;
+                            }
+
+                            & .btn-dialog:hover {
+                                transform: rotate(180deg);
+                            }
+                        }
+
+                        & .pd-dialog:hover {
+                            background-color: rgba(22, 45, 60, 0.1);
+                        }
+                    }
+                   
+                    & .image-pd-update.is-valid {
+                        border: 2px solid red;
+                    }
+                }
+            }
+
+            & .group__pd-info {
+                margin-top: 30px;
+                background: #fff;
+                border-radius: 10px;
+                padding: 15px 10px;
+
+                & label {
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                    font-family: 'Roboto', sans-serif;
+                    font-weight: bold;
+                }
+
+                &__content {
+                    border-bottom: 1px solid #dfe5eb;
+
+                    & .row-info {
+                        display: flex;
+                        
+                    }
+
+                    & .form-textarea {
+                        margin-bottom: 20px;
+                    }
+                }
+
+                &__footer {
+                    width: 100%;
+                    height: auto;
+                    padding-top: 20px;
+
+                    & .info-additional {
+                        display: inline;
+                        margin-left: 15px;
+                        & span {
+                            text-transform: uppercase;
+                        }
+    
+                        &__content {
+                            width: 100%;
+                            height: 100%;
+                            font-family: 'Roboto', sans-serif;
+                            font-weight: 300;
+                            & .if-content__item {
+                                width: 100%;
+                                height: 60px;
+                                cursor: pointer;
+                                margin: 15px 0;
+                                
+                                & .row {
+                                    width: 100%;
+                                    height: 100%;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+    
+                                    & .text-addi, & .name-addi {
+                                        white-space: nowrap;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                    }
+    
+                                    & .name-addi { 
+                                        max-width: 389px;
+                                    }
+    
+                                }
+                            }
+    
+                            & .if-content__item:hover {
+                                background: rgba(56, 153, 236, .3);
+                            }
+    
+                            & .if-content__item.not-event {
+                                pointer-events: none;
+                                user-select: none;
+                                padding: 10px 15px;
+                            }
+                        }
+    
+                        & .btn-add__additional {
+                            margin-left: 20px;
+                            width: 168px;
+                            color: #3899ec;
+                            cursor: pointer;
+    
+                            & i {
+                                margin-right: 10px;
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        & .productUD__right {
+            width: 30%;
+            height: 100%;
+            background: blue;
+        }
+    }
+
+    &__footer { 
+        padding: 0 30px;
+        padding-bottom: 50px;
+        padding-top: 10px;
+        border-top: 1px solid #dfe5eb;
+
+        & .group-btn {
+            display: flex;
+            justify-content: flex-end;
+
+            & .btn {
+                padding: 8px 20px;
+                margin: 20px 30px 0 0;
+                border-top-left-radius: 21px;
+                border-bottom-left-radius: 21px;
+                border-top-right-radius: 21px;
+                border-bottom-right-radius: 21px;
+            }
+
+            & .btn:hover {
+                opacity: 0.8;
+            }
+
+            & .btn-save-pd {
+                color: #fff;
+                background: #3899ec;
+            }
+
+            & .btn-cancel-pd {
+                background: #fff;
+                color: #3899ec;
+            }
+
+            & .btn-cancel-pd:hover {
+                color: #fff;
+                background: #3899ec;
+            }
+        }
+    }
+}

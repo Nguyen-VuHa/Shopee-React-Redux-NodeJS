@@ -1,0 +1,227 @@
+/* màn hình abc */
+@media screen and (max-width: 1024px) {
+    .md .mini-cart {
+        right: -100%;
+    }
+  
+    .header__top {
+        min-width: auto;
+  
+        & .grid-container {
+            display: flex;
+            justify-content: space-around;
+  
+            & .form__search {
+                display: none;
+            }
+  
+            & .grid-item:nth-child(2) {
+                padding: 0;
+                & .masthead .user-notification .content-noti{
+                    transform-origin: 90% 0%;
+                    right: -40%;
+                }
+            }
+        }
+    }
+  
+    .homepage .product-ads {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-gap: 50px;
+        padding: 50px;
+    }
+  
+    .homepage .trademark .trademark-content {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 300px 300px;
+    }
+
+    .homepage .card-sales {
+        width: auto;
+    }
+  
+    .product-store {
+  
+        & .pd-store-content {
+            grid-template-columns: 1.5fr 3fr;
+  
+            & .content-product {
+                padding: 0 20px;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    }
+  
+    .ip-content {
+        padding: 0;
+    }
+  }
+  
+  @media screen and (max-width: 767px) {
+    html,body{width:100%;overflow-x:hidden;}
+
+    .md .mini-cart {
+        max-width: 100%;
+    }
+
+    .header__top {
+        & .grid-container {
+            display: flex;
+            flex-direction: column;
+  
+            & .form__search {
+                display: none;
+            }
+  
+            & .grid-item  {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+
+                & .masthead .user-notification .content-noti{
+                    transform-origin: 90% 0%;
+                    right: -120%;
+                }
+            }
+
+            & .item-user {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+
+                & .menu-btn {
+                    display: block;
+                    padding: 5px 15px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+     
+
+    .homepage .product-ads {
+        padding: 20px 10px;
+    }
+
+    .homepage .card-sales {
+        width: 250px;
+    }
+
+    .header__bottom .container .list-btn {
+        margin-top: 50px;
+        width: 100%;
+        display: block;
+
+        & .item {
+            text-align: center;
+        }
+    }
+
+    .homepage .banner .content-banner .text-content {
+        width: 100%;
+    }
+
+    .header__bottom {
+        position: relative;
+    }
+
+    .header__bottom .container {
+        position: absolute;
+        background-color: #fff;
+        left: -100%;
+        top: -174px;
+        height: 100vh;
+        transition: all .4s ease;
+    }
+
+    .header__bottom .container.show {
+        left: 0;
+    }
+
+    .header__bottom .close-tab {
+        position: absolute;
+        display: block;
+        top: 0;
+        right: 20px;
+        padding: 5px;
+        font-size: 25px;
+        cursor: pointer;
+    }
+    
+    .homepage .trademark .trademark-content {
+        grid-template-columns: 1fr;
+        grid-template-rows: 300px 300px 300px;
+    }
+
+    .product-store {
+        & .pd-store-banner {
+            grid-template-columns: 1fr;
+        }
+
+        & .pd-store-content {
+            grid-template-columns: 1fr;
+
+            & .content-product {
+                grid-template-columns: 1fr;
+                grid-gap: 20px;
+                
+                & .product-item {
+                    height: 350px;
+
+                    & .image-pd {
+                        height: 260px;
+                    }
+                }
+            }
+        }
+    }
+
+    .pdt-header {
+        padding: 0 10px;
+    }
+
+    .product-detail {
+        grid-template-columns: 1fr;
+        padding: 15px;
+
+        & .pdt-item:first-child{
+            grid-row: 2;
+        }
+
+        & .pdt-item {
+
+            & .count-product {
+                font-size: 20px;
+
+                & .gp-count {
+                    width: 100px;
+                }
+            }
+        }
+
+        & .pdt-item .group-button {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 5px;
+
+            & .btn {
+                height: 60px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+
+    .footer .container {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}

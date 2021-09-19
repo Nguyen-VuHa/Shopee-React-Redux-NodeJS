@@ -1,0 +1,375 @@
+
+.category-custom {
+    width: 100%;
+    height: 100%;
+    padding: 30px 50px 0 50px;
+
+    & .ct-content {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        margin-bottom: 15px;
+
+        & .content-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px;
+            font-size: 20px;
+            font-weight: 600;
+            border-bottom: 1px solid #dfe5eb;
+
+            & .title-hd {
+                display: flex;
+
+                & .title {
+                    color: var(--text-header);
+                    margin-right: 10px;
+                }
+    
+                & span {
+                    color: #b6c1cd;
+                }
+            }
+            
+            & .btn-hd-add {
+                color: var(--text-button);
+                font-weight: 300;
+
+                & i {
+                    margin-right: 10px;
+                }
+            }
+        }
+
+        &__left {
+            width: 70%;
+            height: 100%;
+            margin-right: 20px;
+
+            & .ct-wrapper-content {
+                padding: 30px;
+
+                & .ct-empty {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    & h3, & span {
+                        font-size: 20px;
+                        color: var(--text-header);
+                    }
+
+                    & h3 {
+                        font-weight: 400;
+                    }
+
+                    & span { 
+                        font-weight: 100;
+                    }
+
+                    & .btn-add-ct {
+                        margin-top: 20px;
+                        padding: 5px 20px;
+                        background: var(--text-button);
+                        color: #fff;
+
+                        & i {
+                            margin-right: 10px;
+                            font-weight: 100;
+                        }
+                    }
+
+                    & .btn-add-ct:hover {
+                        opacity: 0.8;
+                    }
+                }
+
+                & .ct-body {
+                    display: flex;
+                    flex-wrap: wrap;
+                    width: 100%;
+                    height: auto;
+                    margin-left: -10px;
+
+                    &__card {
+                        position: relative;
+                        width: calc(100% / 4 - 10px);
+                        height: 150px;
+                        margin-left: 10px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        overflow: hidden;
+                        box-shadow: 0 0 15px 0 rgba(22, 45, 60, 0.1);
+
+                        & .card-header {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            border-bottom: none;
+
+                            & .btn-remove {
+                                width: 30px;
+                                height: 30px;
+                                padding: 10px;
+                                z-index: 2;
+                                color: #fff;
+                                opacity: 0;
+                                transition: all .3s ease;
+                            }
+
+                            & .btn-remove:hover {
+                                background: rgba(22,45,59,.4);
+                            }
+
+                            & .index {
+                                top: 12px;
+                                left: 12px;
+                                width: 25px;
+                                height: 25px;
+                                line-height: 25px;
+                                border-radius: 100%;
+                                text-align: center;
+                                background: rgba(22,45,59,.4);
+                                font-size: 13px;
+                                color: #fff;
+                                display: inline-block;
+                                z-index: 2;
+                            }
+                        }
+
+                        & .card-bg {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+
+                            & img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                object-position: center;
+                            }
+                        }
+
+                        & .card-shadow {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            transition: all .4s ease;
+                        }
+
+                        & .card-info {
+                            position: absolute;
+                            bottom: 0;
+                            width: 100%;
+                            height: 46px;
+                            padding: 10px;
+                            background: #fff;
+                            display: flex;
+                            align-items: center;
+                            transition: height .4s ease;
+
+                            & .name-product {
+                                font-size: 14px;
+                                font-weight: 200;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                        }
+                    }
+
+                    &__card:hover {
+                        & .btn-remove { 
+                            opacity: 1;
+                        }
+
+                        & .card-shadow { 
+                            background: rgba(22,45,61,.45);
+                        }
+
+                        & .card-info  {
+                            height: 50%;
+
+                            & .name-product { 
+                                white-space: initial;
+                                text-overflow: inherit;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &__right {
+            width: 30%;
+            height: 100%;
+
+            & .content-body {
+                padding: 30px;
+
+                & .form-row {
+                    margin-bottom: 15px;
+                    width: 100%;
+                    
+                    & label {
+                        margin-bottom: 10px;
+                    }
+
+                    & .media-button {
+                        width: 100%;
+                        background: #e9f5ff;
+                        height: 120px;
+                        display: flex;
+                        border-radius: 10px;
+                        position: relative;
+                        overflow: hidden;
+                        cursor: pointer;
+
+                        & .placeholder {
+                            width: calc(100% - 20px);
+                            height: calc(100% - 20px);
+                            border: 1px dashed #68b1f1;
+                            border-radius: 3px;
+                            display: inline-block;
+                            margin: calc(20px / 2);
+                            cursor: pointer;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            & i {
+                                font-size: 50px;
+                                color: #68b1f1;
+                            }
+                        }
+
+                        & .bg-body {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+
+                            & img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                object-position: center;
+                            }
+                        }
+
+                        &:hover .shadow {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(40, 81, 107, 0.8);
+                            transition: all .4s ease;
+                        }
+
+                        &:hover .group-btn {
+                            position: absolute;
+                            bottom: 10px;
+                            width: 100%;
+                            height: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-end;
+                            color: #fff;
+
+                            & .btn-option {
+                                margin-left: 5px;
+                                padding: 10px;
+                                width: 35px;
+                                height: 35px;
+                                position: relative;
+                            }
+
+                            & .btn-update:hover {
+                                background: rgba(255, 255, 255, 0.3);
+                                transition: all .4s ease;
+                            }
+
+                            & .btn-remove:hover {
+                                background: rgba(255, 255, 255, 0.3);
+                                transition: all .4s ease;
+                            }
+
+                            & .btn-update:hover:after {
+                                content: 'Thay thế';
+                                position: absolute;
+                                top: -110%;
+                                white-space: nowrap;
+                                padding: 5px 15px;
+                                background: #203a4b;
+                                border-radius: 5px;
+                                font-size: 15px;
+                            }
+
+                            & .btn-remove:hover:after {
+                                content: 'Loại bỏ';
+                                position: absolute;
+                                top: -110%;
+                                white-space: nowrap;
+                                padding: 5px 15px;
+                                background: #203a4b;
+                                border-radius: 5px;
+                                font-size: 15px;
+                            }
+                        }
+                    }
+
+                    & .media-button:hover {
+                        background: rgba(219, 239, 255, 0.9)
+                    }
+                }
+            }
+        }
+    }
+
+    & .ct-footer {
+        padding: 0 30px;
+        padding-bottom: 50px;
+        padding-top: 10px;
+        border-top: 1px solid #dfe5eb;
+
+        & .group-btn {
+            display: flex;
+            justify-content: flex-end;
+
+            & .btn {
+                padding: 8px 20px;
+                margin: 20px 30px 0 0;
+                border-top-left-radius: 21px;
+                border-bottom-left-radius: 21px;
+                border-top-right-radius: 21px;
+                border-bottom-right-radius: 21px;
+            }
+
+            & .btn:hover {
+                opacity: 0.8;
+            }
+
+            & .btn-save-pd {
+                color: #fff;
+                background: #3899ec;
+            }
+
+            & .btn-cancel-pd {
+                background: #fff;
+                color: #3899ec;
+            }
+
+            & .btn-cancel-pd:hover {
+                color: #fff;
+                background: #3899ec;
+            }
+        }
+    }
+
+}

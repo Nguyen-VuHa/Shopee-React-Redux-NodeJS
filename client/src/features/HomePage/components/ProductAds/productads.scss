@@ -1,0 +1,128 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;1,300&display=swap');
+
+.product-ads {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 680px 680px;
+    background: var(--item-layout);
+
+    & .product-content, & .product-image  {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    & .product-image img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform .4s ease;
+    }
+
+    & .product-image:hover img{
+        transform: scale(110%);
+    }
+
+    & .product-content {
+        display: flex;
+        flex-direction: column;
+        font-family: 'Roboto', sans-serif;
+
+        & span {
+            width: 80%;
+            font-size: 18px;
+            font-weight: 100;
+        }
+
+        & h4 {
+            font-size: 30px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        & .btn-product {
+            margin-top: 50px;
+            padding: 10px 30px;
+            border: 1px solid var(--color-layout);
+            color: var(--color-layout);
+            border-radius: inherit;
+        }
+
+        & .btn-product:hover {
+            background: var(--color-layout);
+            color: var(--item-layout);
+        }
+    }
+
+}
+
+.trademark {
+    background: #fff;
+
+    & .trademark-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 300px;
+        padding: 40px 0;
+
+        & .trademark-item {
+            background: var(--item-layout);
+            margin: 10px;
+            position: relative;
+
+            & .bg-item {
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+
+                & img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                    transition: transform .35s ease;
+                }
+            }
+
+            & .shadow {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background: rgb(17,17,17);
+                opacity: 0.30;
+            }
+
+            & .content {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            
+                & span {
+                    color: #fff;
+                    text-shadow: 1px 1px var(--color-layout);
+                    font-size: 25px;
+                }
+            }
+        }
+
+        & .trademark-item:hover {
+
+            & .bg-item img{
+               transform: scale(110%);
+            }
+        }
+    }
+}
