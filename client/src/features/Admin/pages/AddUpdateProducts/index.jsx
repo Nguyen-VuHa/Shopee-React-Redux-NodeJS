@@ -207,17 +207,17 @@ const CustomProduct = () => {
                     imageB64: imageProduct,
                     additional,
                 }
-                const actionResult = await dispatch(postNewProduct(objData));
-                const messageResult = unwrapResult(actionResult);
+                // const actionResult = await dispatch(postNewProduct(objData));
+                // const messageResult = unwrapResult(actionResult);
 
-                if(messageResult === 'OK') {
-                    toast.success(<ToastMessage title='Successfully!' message='Sản phẩm đã được lưu!' type='success'/>);
-                    setisHandle(false);
-                    history.push('/admin/product');
-                }
-                else {
-                    toast.warn(<ToastMessage title='Warning!' message={messageResult.message} type='warning'/>);
-                }
+                // if(messageResult === 'OK') {
+                //     toast.success(<ToastMessage title='Successfully!' message='Sản phẩm đã được lưu!' type='success'/>);
+                //     setisHandle(false);
+                //     history.push('/admin/product');
+                // }
+                // else {
+                //     toast.warn(<ToastMessage title='Warning!' message={messageResult.message} type='warning'/>);
+                // }
                 
             }
             catch(err)

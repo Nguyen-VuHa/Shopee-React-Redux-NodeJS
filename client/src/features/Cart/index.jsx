@@ -13,7 +13,6 @@ const Cart = (props) => {
     const [totalPrice, settotalPrice] = useState(0);
     const dispath = useDispatch();
     const accessToken = localStorage.getItem('accessToken');
-    const { listCarts } = useSelector((state) => state.listCart);
 
 
     function SubTotal(listData) {
@@ -68,9 +67,6 @@ const Cart = (props) => {
             //     idCarts: id,
             // }
             // await dispath(plusCarts(objData));
-            console.log(listCarts);
-            var index = listCart.findIndex(obj => obj.id === id);
-            console.log(listCart[index].countProduct);
             // listCart[index].countProduct += 1;
             // setlistCart(listCart);
             // settotalPrice(SubTotal(listCart))

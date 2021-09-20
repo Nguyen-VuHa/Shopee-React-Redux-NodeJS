@@ -1,49 +1,51 @@
-import adminApi from "api/adminApi";
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import * as adminSlice from 'features/Admin/adminSlice';
+import ProductControlAd from 'features/Admin/components/ProductControlAd';
+import ProductItemAd from 'features/Admin/components/ProductItemAd';
+import ProductListAd from "features/Admin/components/ProductListAd";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { PuffLoader } from 'react-spinners';
 import SimpleBar from 'simplebar-react';
 
 const Product = () => {
-    const url = useRouteMatch();
-    const [listProduct, setlistProduct] = useState(null);
-    const history = useHistory();
-    
+    const stateProducts = useSelector((state) => state.adminProduct);
+    const dispatch = useDispatch();
+
     useEffect(() => {
-        const fecthDataProduct = async() => {
-            const data = await adminApi.getProduct();
-            if(data.length > 0)
-                setlistProduct(data.reverse());
-            else
-                setlistProduct(null);
-        }
+        dispatch(adminSlice.getAllProducts());
+    }, [dispatch]);
+   
+    const showProducts = (stateProducts) => {    
+        var result = null;
 
-        fecthDataProduct();
-
-    }, []);
-
-    const handleUpdateProduct = (values, e) => {
-        if(e.target.className !== 'fal fa-trash-alt')
+        if(stateProducts.products.length > 0)
         {
-            history.push(`${url.path}/update-product/${values}`);
+            result = stateProducts.loading ?  
+                <div className="layout-loading">
+                    <div className="loading-page">
+                        <PuffLoader color="#bc4c2a" loading={true} size={70}/>
+                    </div>
+                </div>
+            : stateProducts.products.map((product, index) => {
+                return <ProductItemAd 
+                            key={index} 
+                            product={product}
+                            index={index}
+                        />
+            })
         }
+        else {
+            result = <li className="item-table not-product">
+                        <h3>Không có sản phẩm nào trong kho</h3>
+                    </li>
+        }
+        return result;
     }
-  
    
     return (
         <SimpleBar forceVisible="y" autoHide={false} style={{maxHeight: '100%'}}>
             <div className="ad-products">
-                <div className="pd-header">
-                    <div className="pd-left">
-                        <div>Sản Phẩm</div>
-                        <span>{listProduct ? listProduct.length : 0}</span>
-                    </div>
-                    <div className="pd-right">
-                        <Link to={`${url.path}/new-product`} className="btn-add-pd">
-                            <i className="fal fa-plus"></i>
-                            Thêm sản phẩm
-                        </Link>
-                    </div>
-                </div>
+                <ProductControlAd productCount={stateProducts.products ? stateProducts.products.length : 0}/>
                 <div className="pd-content">
                     <ul className="pd-content__list"> 
                         <li className="item-list">
@@ -63,43 +65,9 @@ const Product = () => {
                             </div>
                         </li>
                     </ul>
-                    <ul className="pd-content__table">
-                        
-                        { listProduct ? 
-                            listProduct.map((data, index) => {
-                                return (
-                                    <li className="item-table" key={index} onClick={(e) => handleUpdateProduct(data.idProduct, e)}>
-                                        <div className="dyamic-width">
-                                            <div className="context-name">
-                                                <div className="pd-img">
-                                                    <img src={data.imageUrl} alt="NotImage"/>
-                                                </div>
-                                                <div className="info-product">
-                                                    <div className="text-name">
-                                                    {data.nameProduct}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="static-width">
-                                            <div className="pd-hd context-sku">{data.idProduct}</div>
-                                            <div className="pd-hd context-price">{data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} đ</div>
-                                            <div className="pd-hd context-inventory">Có hàng trong kho</div>
-                                            <div className="pd-hd context-option">
-                                                <i className="fal fa-trash-alt"></i>
-                                            </div>
-                                        </div>
-                                    </li>
-                                )
-                            
-                            })
-                            :   
-                            <li className="item-table not-product">
-                                <h3>Không có sản phẩm nào trong kho</h3>
-                            </li>
-                        }
-                    
-                    </ul>
+                    <ProductListAd>
+                        { showProducts(stateProducts) }
+                    </ProductListAd>
                 </div>
             </div>
         </SimpleBar>

@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import registerReducer from 'features/Auth/authSlice';
-import productReduce from 'features/Admin/adminSlice';
-import listCartsReduce from 'features/Cart/cartSlice';
+import productReducer from 'features/Admin/adminSlice';
+import listCartsReducer from 'features/Cart/cartSlice';
+import adminReducer from 'features/Admin/adminSlice';
 
 const rootReducer = {
     registers: registerReducer,
-    products: productReduce,
-    listCarts: listCartsReduce,
+    products: productReducer,
+    listCarts: listCartsReducer,
+    adminProduct : adminReducer, 
 }
 
 const store = configureStore({

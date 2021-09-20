@@ -2,9 +2,21 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import adminApi from "api/adminApi";
 import productApi from "api/productApi";
 
-export const postNewProduct = createAsyncThunk('admin/postNewProduct', async (thunkApi) => {
-    const mesage = await productApi.postProduct(thunkApi);
-    return mesage;
+var initialState = {
+    products: [],
+    statusMesage: '',
+    loading: false,
+    error: '',
+};
+
+export const getAllProducts = createAsyncThunk('admin/getAllProducts' , async () => { 
+    const stateReponse = await productApi.getAllProduct();
+    return stateReponse;
+})
+
+export const createProduct = createAsyncThunk('admin/createProduct', async (thunkApi) => {
+    const stateReponse = await productApi.postProduct(thunkApi);
+    return stateReponse;
 })
 
 export const postUpdateProduct = createAsyncThunk('admin/postUpdateProduct', async (thunkApi) => {
@@ -32,26 +44,33 @@ export const updateCategory = createAsyncThunk('admin/updateCategory', async (th
     return mesage;
 })
 
+
+
+
 const adminApis = createSlice({ 
-    name: 'add-product',
-    initialState: {
-        statusMesage: '',
-        loading: false,
-        error: '',
-    },
-    reducers: {},
+    name: 'products',
+    initialState: initialState,
+    reducers: {
+        updateProduct: (state, action) => {
+            console.log(action);
+            return state;
+        }
+    }, 
     extraReducers: {
-        [postNewProduct.pending]: (state) => {
+        // GET ALL PRODUCTS
+        [getAllProducts.pending]: (state) => {
             state.loading = true;
         },
-        [postNewProduct.rejected]: (state, action) => {
+        [getAllProducts.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        [postNewProduct.fulfilled]: (state, action) => {
+        [getAllProducts.fulfilled]: (state, action) => {
             state.loading = false;
-            state.statusMesage = action.payload;
+            state.products = action.payload;
+            state.statusMesage = 'OK'
         },
+        //
     }
 },{ 
     name: 'update-product',
@@ -160,5 +179,6 @@ const adminApis = createSlice({
     }
 },)
 
-const  { reducer } = adminApis;
+const  { reducer, actions } = adminApis;
+export const { removeItem } = actions;
 export default reducer;
