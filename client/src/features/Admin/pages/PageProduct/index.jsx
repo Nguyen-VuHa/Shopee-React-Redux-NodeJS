@@ -1,18 +1,18 @@
-import * as adminSlice from 'features/Admin/adminSlice';
-import ProductControlAd from 'features/Admin/components/ProductControlAd';
-import ProductItemAd from 'features/Admin/components/ProductItemAd';
-import ProductListAd from "features/Admin/components/ProductListAd";
+import * as adProductSlice from 'features/Admin/adminProductSlice';
+import ProductControlAd from 'features/Admin/components/ProductComponents/ProductControlAd';
+import ProductItemAd from 'features/Admin/components/ProductComponents/ProductItemAd';
+import ProductListAd from "features/Admin/components/ProductComponents/ProductListAd";
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { PuffLoader } from 'react-spinners';
 import SimpleBar from 'simplebar-react';
 
 const Product = () => {
-    const stateProducts = useSelector((state) => state.adminProduct);
+    const stateProducts = useSelector((state) => state.adProducts);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(adminSlice.getAllProducts());
+        dispatch(adProductSlice.getAllProducts());
     }, [dispatch]);
    
     const showProducts = (stateProducts) => {    

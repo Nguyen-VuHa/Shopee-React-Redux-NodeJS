@@ -9,16 +9,6 @@ var initialState = {
     error: '',
 };
 
-export const getAllProducts = createAsyncThunk('admin/getAllProducts' , async () => { 
-    const stateReponse = await productApi.getAllProduct();
-    return stateReponse;
-})
-
-export const createProduct = createAsyncThunk('admin/createProduct', async (thunkApi) => {
-    const stateReponse = await productApi.postProduct(thunkApi);
-    return stateReponse;
-})
-
 export const postUpdateProduct = createAsyncThunk('admin/postUpdateProduct', async (thunkApi) => {
     const mesage = await adminApi.UpdateProduct(thunkApi);
     return mesage;
@@ -48,31 +38,6 @@ export const updateCategory = createAsyncThunk('admin/updateCategory', async (th
 
 
 const adminApis = createSlice({ 
-    name: 'products',
-    initialState: initialState,
-    reducers: {
-        updateProduct: (state, action) => {
-            console.log(action);
-            return state;
-        }
-    }, 
-    extraReducers: {
-        // GET ALL PRODUCTS
-        [getAllProducts.pending]: (state) => {
-            state.loading = true;
-        },
-        [getAllProducts.rejected]: (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
-        },
-        [getAllProducts.fulfilled]: (state, action) => {
-            state.loading = false;
-            state.products = action.payload;
-            state.statusMesage = 'OK'
-        },
-        //
-    }
-},{ 
     name: 'update-product',
     initialState: {
         statusMesage: '',

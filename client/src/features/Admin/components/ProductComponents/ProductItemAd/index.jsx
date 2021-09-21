@@ -1,30 +1,33 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import adminSlice from 'features/Admin/adminSlice';
+import * as editProduct from 'features/Admin/pages/AddUpdateProducts/editSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router';
 
 const ProductItemAd = (props) => {
-    const { product, index } = props;
+    const { product } = props;
+    const adProduct = useSelector((state) => state.adProducts);
     const disPatch = useDispatch();
     const history = useHistory();
     const url = useRouteMatch();
 
     const handleRemoveItem = () => {
-        console.log(product.idProduct);
-        var action = adminSlice.removeItem(product.idProduct);
-        disPatch(action);
+        // var action = adminSlice.removeItem(product.idProduct);
+        // disPatch(action);
     }
 
-    const handleUpdateProduct = (values, e) => {
+    const handleUpdateProduct = (e) => {
         if(e.target.className !== 'fal fa-trash-alt')
         {
-            history.push(`${url.path}/update-product/${values}`);
+            var productById = adProduct.products.filter(p => p.idProduct === product.idProduct);
+            const action = editProduct.setItemProduct(productById);
+            disPatch(action);
+            history.push(`${url.path}/update-product/${product.idProduct}`);
         }
     }
     
 
     return (
-        <li className="item-table" onClick={(e) => handleUpdateProduct(product.idProduct, e)}>
+        <li className="item-table" onClick={(e) => handleUpdateProduct(e)}>
             <div className="dyamic-width">
                 <div className="context-name">
                     <div className="pd-img">

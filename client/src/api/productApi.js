@@ -13,6 +13,10 @@ const productApi = {
         const url = `/api/product/new-product`;
         return axiosClient.post(url, JSON.stringify(data));
     },
+    updateProduct: (data) => {
+        const url =`/api/product/update/${data.idProduct}`;
+        return axiosClient.post(url, JSON.stringify(data));
+    },
 }
 
 export default productApi;

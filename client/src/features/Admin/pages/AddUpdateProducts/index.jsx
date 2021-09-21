@@ -1,12 +1,14 @@
 import { unwrapResult } from '@reduxjs/toolkit';
 import adminApi from 'api/adminApi';
 import ToastMessage from 'components/ToastMessage/toastmessage';
-import { postNewProduct, postUpdateProduct } from 'features/Admin/adminSlice';
+import { createProduct, updateProduct } from 'features/Admin/adminProductSlice';
+import { postUpdateProduct } from 'features/Admin/adminSlice';
+import FooterControlForm from 'features/Admin/components/FooterControlForm';
 import ModalAddi from 'features/Admin/components/ModalAdditional';
 import LoadingSubmit from 'features/Admin/components/ModalLoadingSubmit';
 import $ from 'jquery';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Col, Container, FormGroup, Input, Label, Row } from 'reactstrap';
@@ -14,7 +16,10 @@ import SimpleBar from 'simplebar-react';
 import './customProduct.scss';
 
 const CustomProduct = () => {
+    const editProduct = useSelector((state) => state.editProduct);
+
     // useState chung 
+    const [idProduct, setidProduct] = useState('');
     const [isHandle, setisHandle] = useState(false);
     const [imageProduct, setImageProduct] = useState('');
     const [price, setPrice] = useState('');
@@ -33,6 +38,17 @@ const CustomProduct = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     // sự kiện chung
+    useEffect(() => {
+        setidProduct(editProduct.idProduct);
+        setdataForm({
+            nameProduct: editProduct.nameProduct,
+            desc: editProduct.descProduct,
+        })
+        setImageProduct(editProduct.imageUrl);
+        setPrice(editProduct.price);
+        setAdditional(editProduct.detailDesciption);
+    }, [editProduct]);
+
     const handleOpenDialog = () => {
         $('.choose-image').click();
     }
@@ -52,10 +68,20 @@ const CustomProduct = () => {
     }
 
     const handleRemoveImage = () => {
-        setImageProduct(null);
+        $('.choose-image').val('');
+        setImageProduct('');
     }
     // update product
     const params = useParams();
+
+    const handleOnSave = () => {
+        if(JSON.stringify(params) === '{}') {
+            handleCreateProduct();
+        }
+        else {
+            handleUpdateProduct();
+        }
+    }
 
     useEffect(() => {
         if(JSON.stringify(params) !== '{}') 
@@ -77,7 +103,7 @@ const CustomProduct = () => {
     }, [params, dispatch]);
 
     const handleUpdateProduct = async () => {
-        if($('.price-product').val() && imageProduct && dataForm.nameProduct){
+        if(price && imageProduct && dataForm.nameProduct){
             setisHandle(true);
             try {
                 var objData = {
@@ -90,8 +116,10 @@ const CustomProduct = () => {
                     imageB64: imageProduct,
                     additional,
                 }
-                const actionResult = await dispatch(postUpdateProduct(objData));
-                const messageResult = unwrapResult(actionResult);
+
+                const result = await dispatch(updateProduct(objData));
+                const messageResult = unwrapResult(result);
+
                 if(messageResult === 'OK') {
                     toast.success(<ToastMessage title='Successfully!' message='Cập nhật thành công!' type='success'/>);
                     setisHandle(false);
@@ -179,7 +207,7 @@ const CustomProduct = () => {
     } 
 
     function isChecked() {
-        if(!$('.price-product').val())
+        if(!price)
         {
             setvalidPrice(false);
         }
@@ -194,8 +222,8 @@ const CustomProduct = () => {
         }
     }
 
-    async function handleSubmitForm (){  
-        if($('.price-product').val() && imageProduct && dataForm.nameProduct){
+    async function handleCreateProduct(){  
+        if(price && imageProduct && dataForm.nameProduct){
             setisHandle(true);
             try {
                 var objData = {
@@ -207,17 +235,17 @@ const CustomProduct = () => {
                     imageB64: imageProduct,
                     additional,
                 }
-                // const actionResult = await dispatch(postNewProduct(objData));
-                // const messageResult = unwrapResult(actionResult);
+                const actionResult = await dispatch(createProduct(objData));
+                const messageResult = unwrapResult(actionResult);
 
-                // if(messageResult === 'OK') {
-                //     toast.success(<ToastMessage title='Successfully!' message='Sản phẩm đã được lưu!' type='success'/>);
-                //     setisHandle(false);
-                //     history.push('/admin/product');
-                // }
-                // else {
-                //     toast.warn(<ToastMessage title='Warning!' message={messageResult.message} type='warning'/>);
-                // }
+                if(messageResult === 'OK') {
+                    toast.success(<ToastMessage title='Successfully!' message='Sản phẩm đã được lưu!' type='success'/>);
+                    setisHandle(false);
+                    history.push('/admin/product');
+                }
+                else {
+                    toast.warn(<ToastMessage title='Warning!' message={messageResult.message} type='warning'/>);
+                }
                 
             }
             catch(err)
@@ -243,10 +271,7 @@ const CustomProduct = () => {
             setvalidNameProduct(true);
         }
     }
-
-    const handleCancelForm = () => {
-        history.goBack();
-    }
+   
 
     return (
         <form className="productUD">
@@ -259,7 +284,7 @@ const CustomProduct = () => {
                                 <h4>Hình ảnh sản phẩm</h4>
                             </div>
                             <div className="group__pd-photo__content">
-                                <input type="file" className="choose-image" onChange={handleOnChangeImg} hidden/>
+                                <input type="file" className="choose-image"  onChange={handleOnChangeImg} hidden/>
                                 <div className={validImage ? "image-pd-update" : "image-pd-update is-valid"}>
                                     {
                                         imageProduct ?  
@@ -339,16 +364,7 @@ const CustomProduct = () => {
                     <div className="productUD__right">
                     </div>
                 </Container>
-                <div className="productUD__footer">
-                    <div className="group-btn">
-                        <div type="button" className="btn btn-cancel-pd" onClick={handleCancelForm}>
-                            Hủy
-                        </div>
-                        <div type="button" className="btn btn-save-pd" onClick={JSON.stringify(params) !== '{}' ? handleUpdateProduct  : handleSubmitForm} >
-                            Lưu Lại
-                        </div>
-                    </div>
-                </div>
+                <FooterControlForm handleOnSave={handleOnSave}/>
             </SimpleBar>
             <ModalAddi handleValuesModal={handleValuesModal} isUpdateModal={isUpdateModal} handleRemoveItem={handleRemoveItem} handleUpdateValues={handleUpdateValues}/>
         </form>
