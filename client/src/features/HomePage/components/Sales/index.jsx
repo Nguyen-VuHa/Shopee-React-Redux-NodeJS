@@ -38,7 +38,7 @@ const SalesHomePage = () => {
                             <div className="card-sales card-active">
                                     <div className="card-out-side">
                                         <div className="card-img">
-                                            <img src="https://bibi-cosmetic-store.herokuapp.com/api/product/image/939c1194-3a2c-40ef-b05f-17be3548672b" alt="NotImage"/>
+                                            <img src="http://res.cloudinary.com/bibi-korea/image/upload/v1632198249/product_image/wl83bqloz69zy9gcov65.jpg" alt="NotImage"/>
                                         </div>
                                         <div className="card-armorial">
                                             Best Seller
@@ -88,7 +88,7 @@ const SalesHomePage = () => {
                                 <div className="card-sales card-active">
                                     <div className="card-out-side">
                                         <div className="card-img">
-                                            <img src="https://bibi-cosmetic-store.herokuapp.com/api/product/image/cf098ad9-a794-4667-a3da-1829c25d04fa" alt="NotImage" />
+                                            <img src="http://res.cloudinary.com/bibi-korea/image/upload/v1632198249/product_image/wl83bqloz69zy9gcov65.jpg" alt="NotImage" />
                                         </div>
                                         <div className="card-armorial">
                                             Best Seller
@@ -138,7 +138,7 @@ const SalesHomePage = () => {
                                 <div className="card-sales card-active">
                                     <div className="card-out-side">
                                         <div className="card-img">
-                                            <img src="https://bibi-cosmetic-store.herokuapp.com/api/product/image/097bac50-0f5f-4011-b4d3-ddd322bab570" alt="NotImage"/>
+                                            <img src="http://res.cloudinary.com/bibi-korea/image/upload/v1632198249/product_image/wl83bqloz69zy9gcov65.jpg" alt="NotImage"/>
                                         </div>
                                         <div className="card-armorial">
                                             Best Seller
@@ -188,7 +188,7 @@ const SalesHomePage = () => {
                                 <div className="card-sales card-active">
                                     <div className="card-out-side">
                                         <div className="card-img">
-                                            <img src="https://bibi-cosmetic-store.herokuapp.com/api/product/image/091fe792-7d96-483b-99cb-fa18303f0de3" alt="NotImage"/>
+                                            <img src="http://res.cloudinary.com/bibi-korea/image/upload/v1632198249/product_image/wl83bqloz69zy9gcov65.jpg" alt="NotImage"/>
                                         </div>
                                         <div className="card-armorial">
                                             Best Seller
@@ -238,7 +238,7 @@ const SalesHomePage = () => {
                                 <div className="card-sales card-active">
                                     <div className="card-out-side">
                                         <div className="card-img">
-                                            <img src="https://bibi-cosmetic-store.herokuapp.com/api/product/image/30e532d9-236f-4e69-b6b7-c0b649afde4c" alt="NotImage"/>
+                                            <img src="http://res.cloudinary.com/bibi-korea/image/upload/v1632198249/product_image/wl83bqloz69zy9gcov65.jpg" alt="NotImage"/>
                                         </div>
                                         <div className="card-armorial">
                                             Best Seller

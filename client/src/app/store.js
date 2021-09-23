@@ -5,6 +5,7 @@ import adProductReducers from 'features/Admin/adminProductSlice';
 import editProductReducers from 'features/Admin/pages/AddUpdateProducts/editSlice';
 import adCategoryReducers from 'features/Admin/adminCategorySlice';
 import modalCheckedListReducers from 'features/Admin/components/ModalCategory/modalCategorySlice';
+import productsReducers from 'features/Product/productSlice';
 
 const rootReducer = {
     registers: registerReducer,
@@ -13,6 +14,7 @@ const rootReducer = {
     editProduct: editProductReducers,
     adCategories: adCategoryReducers,
     modalChecked: modalCheckedListReducers,
+    products: productsReducers,
 }
 
 const store = configureStore({

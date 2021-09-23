@@ -25,7 +25,6 @@ const Cart = (props) => {
     }
  
     useEffect(() => {
-       
         if(accessToken) {
             const getListCart = async () => {
                 const data = await dispath(getCarts(accessToken));
@@ -104,7 +103,7 @@ const Cart = (props) => {
                     </div>
                 </div>
                 <div className="content-cart">
-                    {listCart.length > 0 ? 
+                    {/* {listCart.length > 0 ? 
                         <SimpleBar forceVisible="y" autoHide={true} style={{ maxHeight: '100%' }}>
                                 {listCart.length > 0 ?
                                 listCart.map(function(data, index) {
@@ -143,10 +142,10 @@ const Cart = (props) => {
                     <span>
                         Giỏ hàng hiện đang trống
                     </span>
-                    }
+                    } */}
                     
                     </div>
-                    {listCart.length > 0 ?  
+                    {/* {listCart.length > 0 ?  
                     <>
                         <div className="cart-subtotal">
                             <div className="cart-subtotal__title">Tổng tiền thanh toán</div>
@@ -156,7 +155,7 @@ const Cart = (props) => {
                             <div className="btn btn-view-cart">Xem Giỏ Hàng</div>
                         </div>
                     </>
-                    : ''}
+                    : ''} */}
             </div>
         </div>
     );

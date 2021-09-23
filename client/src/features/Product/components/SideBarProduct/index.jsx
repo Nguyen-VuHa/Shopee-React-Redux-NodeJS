@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { Card, CardBody, UncontrolledCollapse } from 'reactstrap';
 import $ from 'jquery';
-import PropTypes from 'prop-types';
 
 const SideBarProduct = (props) => {
+    const { listCategory, handleFilterCategory} = props;
 
     useEffect(() => {
         $('.filter-category').on('click', function() {
@@ -20,7 +20,12 @@ const SideBarProduct = (props) => {
 
     const handleClickItem = (idCategory, e) => {
         $(e.target).addClass('active').siblings().removeClass('active');
-        props.handleFilterCategory(idCategory);
+        handleFilterCategory(idCategory);
+    }
+
+    const handleClickAll = (e) => {
+        $(e.target).addClass('active').siblings().removeClass('active');
+        handleFilterCategory('all');
     }
     
     return (
@@ -36,17 +41,13 @@ const SideBarProduct = (props) => {
                 </button>
                 <UncontrolledCollapse toggler="#category" className="tab-category">
                     <ul>
-                        {props.listCategory.map(function(data, index) {
-                            if(data.idCategory === 'all') {
-                                return <li className="child-item active" key={index} onClick={(e) => handleClickItem(data.idCategory , e)}>
-                                {data.nameCategory}
-                                </li>
-                            }
-                            else {
+                        <li className="child-item active" onClick={(e) => handleClickAll(e)}>
+                            Tất Cả
+                        </li>
+                        {listCategory.map(function(data, index) {
                                 return <li className="child-item" key={index} onClick={(e) => handleClickItem(data.idCategory , e)}>
                                     {data.nameCategory}
                                 </li>
-                            }
                         })}
                     </ul>
                 </UncontrolledCollapse>
@@ -73,8 +74,7 @@ const SideBarProduct = (props) => {
 
 
 SideBarProduct.propTypes = {
-    listCategory: PropTypes.array.isRequired,
-    handleFilterCategory: PropTypes.func,
+
 };
 
 
