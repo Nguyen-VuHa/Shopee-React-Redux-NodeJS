@@ -1,16 +1,17 @@
-import adminApi from 'api/adminApi';
+import { unwrapResult } from '@reduxjs/toolkit';
 import ToastMessage from 'components/ToastMessage/toastmessage';
-import { deleteCategory } from 'features/Admin/adminSlice';
+import * as categorySlice from 'features/Admin/adminCategorySlice';
+import CategoryControl from 'features/Admin/components/CategoryComponents/CategoryControl';
+import CategoryList from 'features/Admin/components/CategoryComponents/CategoryList';
 import $ from 'jquery';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './category.scss';
 
 const Category = () => {
-    const [listCategory, setlistCategory] = useState([]);
-    const [countCategory, setcountCategory] = useState(0);
+    const stateCate = useSelector((state) => state.adCategories);
     const url = useRouteMatch();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -20,19 +21,13 @@ const Category = () => {
             $('.tooltip-backdrop').removeClass('active');
             $('.btn-option').removeClass('active');
             $('.content-option').removeClass('active');
-        })
-
+        });
     }, []);
 
     useEffect(() => {
-        const fecthCategory = async () => {
-            const data = await adminApi.getCategory();
-   
-            setcountCategory(data.countProduct);
-            setlistCategory(data.objData);
-        }
-        fecthCategory();
-    }, []);
+        const action = categorySlice.getAllCategory();
+        dispatch(action);
+    }, [dispatch]);
 
     const handleOpenOption = (e) => {
         $(e.currentTarget).addClass('active');
@@ -41,12 +36,11 @@ const Category = () => {
     }
 
     const handleRemoveCategory = async (values) => {
-        const result = await dispatch(deleteCategory(values));
-
-        if(result.payload.status === 'success')
+        const result = await dispatch(categorySlice.deleteCategory(values));
+        const messageResult = unwrapResult(result);
+        if(messageResult.status === 'success')
         {
             toast.error(<ToastMessage title='Infomation' message='Bộ sưu tập đã được xóa!' type='error'/>);
-            setlistCategory(listCategory.filter(item => item.idCategory !== values));
         }
     }
 
@@ -56,18 +50,7 @@ const Category = () => {
 
     return (
         <div className="pd-collection">
-            <div className="pd-collection__header">
-                <div className="hd-left">
-                    <div>Bộ Sưu Tập</div>
-                    <span>{listCategory.length}</span>
-                </div>
-                <div className="hd-right">
-                    <Link to={`${url.path}/new-category`} className="btn btn-add-collection">
-                        <i className="fal fa-plus"></i>
-                        Bộ sưu tập mới
-                    </Link>
-                </div>
-            </div>
+            <CategoryControl countCategory={stateCate.categories.objData.length}/>
             <div className="pd-collection__content">
                 <div className="card-box">
                     <div className="card-bg">
@@ -78,7 +61,7 @@ const Category = () => {
                         <div className="name-collection">
                             Tất cả sản phẩm
                         </div>
-                        <span className="count-collection">{ countCategory }</span>
+                        <span className="count-collection">{ stateCate.categories.countProduct }</span>
                     </div>
                     <div className="card-option">
                         <div className="btn-circle btn-option" onClick={handleOpenOption}>
@@ -94,36 +77,14 @@ const Category = () => {
                         </div>
                     </div>
                 </div>
-                { listCategory && listCategory.map(function(data, index) {
-                    return   <div className="card-box" key={index}>
-                                <div className="card-bg">
-                                    <img src={data.urlImage} alt="NotImage"/>
-                                </div>
-                                <div className="card-shadow"></div>
-                                <div className="card-content">
-                                    <div className="name-collection">
-                                        {data.nameCategory}
-                                    </div>
-                                    <span className="count-collection">{data.countProduct}</span>
-                                </div>
-                                <div className="card-option">
-                                    <div className="btn-circle btn-option" onClick={handleOpenOption}>
-                                        <i className="far fa-ellipsis-h"></i>
-                                        <div className="group-box content-option">
-                                            <ul className="list-option">
-                                                <li className="item-option" onClick={() => handleUpdateCategory(data.idCategory)}>
-                                                    <i className="fal fa-edit"></i>
-                                                    Chỉnh sửa
-                                                </li>
-                                                <li className="item-option item-remove" onClick={() => handleRemoveCategory(data.idCategory)}>
-                                                    <i className="fal fa-trash-alt"></i>
-                                                    Xóa
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                { stateCate.categories.objData && stateCate.categories.objData.map(function(data, index) {
+                    return  <CategoryList 
+                                key={index} 
+                                data={data} 
+                                handleRemoveCategory={handleRemoveCategory}  
+                                handleUpdateCategory={handleUpdateCategory} 
+                                handleOpenOption={handleOpenOption}
+                            />
                 })}
                  <div className="tooltip-backdrop"></div>
                 <div className="card-box-add">

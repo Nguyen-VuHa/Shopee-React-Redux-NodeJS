@@ -23,6 +23,10 @@ export const updateProduct = createAsyncThunk('UPDATE_PRODUCT', async (thunkApi)
     return stateReponse;
 })
 
+export const searchProduct = createAsyncThunk('SEARCH_PRODUCT', async (thunkApi) => {
+    const stateReponse = await productApi.searchProduct(thunkApi);
+    return stateReponse;
+})
 
 const adminProductApis = createSlice({  
     name: 'products',
@@ -65,6 +69,20 @@ const adminProductApis = createSlice({
         [updateProduct.fulfilled]: (state, action) => {
             state.loading = false;
             state.statusMesage = action.payload
+        },
+        // SEARCH PRODUCT
+        [searchProduct.pending]: (state) => {
+            state.loading = true;
+        },
+        [searchProduct.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        [searchProduct.fulfilled]: (state, action) => {
+            console.log( action.payload.data);
+            state.loading = false;
+            state.products = action.payload.data;
+            state.statusMesage = 'OK'
         },
     }
 })

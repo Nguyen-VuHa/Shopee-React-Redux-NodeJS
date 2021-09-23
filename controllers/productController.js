@@ -4,6 +4,7 @@ const Additional = require('../models/thongtinbosung');
 const { cloudinary } = require('../untils/cloudinary');
 
 class ProductController { 
+
     // [GET] /product
     async getAllProduct(req, res) {
         const product = await Product.findAll();
@@ -133,7 +134,6 @@ class ProductController {
         
         if(additional.length > 0)
         {
-
             additional.forEach(item => {
                 Additional.create({
                     title: item.title,
@@ -152,15 +152,13 @@ class ProductController {
     async getProductByQuery (req, res) {
         const { query_search } = req.query;
         const dataSearch = await Product.filterByProductName(query_search);
-
-        console.log(dataSearch);
         const arrayData = [];
 
         if(dataSearch) {
             dataSearch.forEach(item => {
                 let object = {
                     idProduct: item.idProduct,
-                    urlImage: item.imageUrl,
+                    imageUrl: item.imageUrl,
                     nameProduct: item.nameProduct,
                     price: item.price,
                     status: item.status,
@@ -170,6 +168,7 @@ class ProductController {
         }
         res.json({status: 'success', data: arrayData});
     }
+
 }
 
 

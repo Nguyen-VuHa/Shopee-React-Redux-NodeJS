@@ -2,8 +2,7 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import adminApi from 'api/adminApi';
 import ToastMessage from 'components/ToastMessage/toastmessage';
 import { createProduct, updateProduct } from 'features/Admin/adminProductSlice';
-import { postUpdateProduct } from 'features/Admin/adminSlice';
-import FooterControlForm from 'features/Admin/components/FooterControlForm';
+import FooterControlForm from 'features/Admin/components/ProductComponents/FooterControlForm';
 import ModalAddi from 'features/Admin/components/ModalAdditional';
 import LoadingSubmit from 'features/Admin/components/ModalLoadingSubmit';
 import $ from 'jquery';
@@ -119,7 +118,7 @@ const CustomProduct = () => {
 
                 const result = await dispatch(updateProduct(objData));
                 const messageResult = unwrapResult(result);
-
+                
                 if(messageResult === 'OK') {
                     toast.success(<ToastMessage title='Successfully!' message='Cập nhật thành công!' type='success'/>);
                     setisHandle(false);

@@ -6,22 +6,25 @@ class categoryController {
     // [POST] /category/new-category
     async newCategory(req, res) {
         const { nameCategory, imageCategory, listProduct } = req.body;
-
+        var uploadResponse = '';
         try {
-            const uploadResponse = await cloudinary.uploader.upload(imageCategory, {
-                upload_preset: 'category_image',
-            });
+            if(imageCategory) {
+                uploadResponse = await cloudinary.uploader.upload(imageCategory, {
+                    upload_preset: 'category_image',
+                });
+            }
 
             try{
                 let category = await Category.create({
                     nameCategory: nameCategory,
-                    imageUrl: uploadResponse.url,
+                    imageUrl: uploadResponse?.url,
                 });
         
-                for (var item in listProduct) {
-                    let temp = await Product.findByIdProduct(listProduct[item].idProduct);
+                for (var i = 0; i < listProduct.length; i++) {
+                    let temp = await Product.findByIdProduct(listProduct[i]);
                     category.addSANPHAM(temp);
                 }
+                
                 res.json({status: 'success'});
             }
             catch (err) {
@@ -183,8 +186,8 @@ class categoryController {
                 }
             })
 
-            for (var item in listProduct) {
-                let temp = await Product.findByIdProduct(listProduct[item].idProduct);
+            for (var i = 0; i < listProduct.length; i++) {
+                let temp = await Product.findByIdProduct(listProduct[i]);
                 category.addSANPHAM(temp);
             }
             

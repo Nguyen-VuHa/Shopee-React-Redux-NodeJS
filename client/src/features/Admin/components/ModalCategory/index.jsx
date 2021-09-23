@@ -1,21 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import './modal-category.scss';
 import $ from 'jquery';
-
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import MdCateControl from './components/MdCateControl';
+import MdCateProductList from './components/MdCateProductList';
+import MdCateSearch from './components/MdCateSearch';
+import { useDispatch } from 'react-redux';
+import './modal-category.scss';
+import { setItemProduct } from './modalCategorySlice';
 
 const ModalCategory = (props) => {
-    const [changeText, setchangeText] = useState('');
+    const stateProduct = useSelector((state) => state.adProducts);
+    const stateListChecked = useSelector((state) => state.modalChecked);
+    const [listProduct, setlistProduct] = useState([]);
     const [listChooseProduct, setlistChooseProduct] = useState([]);
-    const typingTimeoutRef = useRef(null);
-
-
+    const dispatch = useDispatch();
+    
     useEffect(() => {
-        if(props.showModal)
-        {
-            setlistChooseProduct(props.listRender);
-        }
-    }, [props.showModal, props.listRender]);
+        setlistProduct(stateProduct?.products);
+    }, [stateProduct]);
 
     function closeModal() {
         $('.modal-open').addClass('hidden');
@@ -29,63 +32,33 @@ const ModalCategory = (props) => {
     }
 
     const handleRemoveText = () => {
-        setchangeText('');
+        setlistProduct(stateProduct?.products);
         props.handleSearch('');
     }
 
-    const handleClick = (values, e) => {
-        $(e.currentTarget).find('.checkbox-inner').toggleClass('checked');
-        if($(e.currentTarget).find('.checkbox-inner').hasClass('checked') && !$(e.target).closest('.checkbox-inner').length)
-        {
-            let array = listChooseProduct;
-            if(listChooseProduct.filter(item => item.idProduct !== values)){
-                array.push({
-                    idProduct: values    
-                })
-            }
-
-            setlistChooseProduct(array);
-        }
-        else {
-            setlistChooseProduct(listChooseProduct.filter(item => item.idProduct !== values));
-        }
-    }
-    
-
-    const handleChecked = (values, e) => {
-        $(e.currentTarget).toggleClass('checked');
-        if(!$(e.currentTarget).hasClass('checked'))
-        {
-            let array = listChooseProduct;
-            if(listChooseProduct.filter(item => item.idProduct !== values)){
-                array.push({
-                    idProduct: values    
-                })
-            }
-
-            setlistChooseProduct(array);
-        }
-        else {
-            setlistChooseProduct(listChooseProduct.filter(item => item.idProduct !== values));
-        }
-    }
-
-    const handleChangeSearch = (e) => {
-        const value = e.target.value;
-        setchangeText(value);
-
-        if(typingTimeoutRef.current) {
-            clearTimeout(typingTimeoutRef.current);
-        }
-
-        typingTimeoutRef.current = setTimeout(() => {
-            props.handleSearch(value);
-        }, 600);
-    }
-
     const handleSubmitModal = () => {
-        props.handleCheckedSubmit(listChooseProduct);
+        const action = setItemProduct(listChooseProduct);
+        dispatch(action);
         closeModal();
+        setlistChooseProduct([]);
+    }
+
+    const handleChooseItem = (idProduct) => {
+        var newList = listChooseProduct;
+       
+        if(listChooseProduct.includes(idProduct)) {
+            setlistChooseProduct(newList.filter(id => id !== idProduct));
+        } else {
+            newList.push(idProduct);
+            setlistChooseProduct(newList);
+        }
+    }
+
+    const hanldeSearchProduct = (q) => {
+        if(q)
+            setlistProduct(listProduct.filter(u => u.nameProduct.toLowerCase().indexOf(q.toLowerCase()) !== -1));
+        else 
+            setlistProduct(stateProduct?.products);
     }
 
     return (
@@ -95,56 +68,24 @@ const ModalCategory = (props) => {
                 <div className="categoryInfo">
                     <header className="category-modal-title">
                         <h1>Thêm sản phẩm vào bộ sưu tập</h1>
-                        <div className="btn-close-modal" onClick={handleCloseModal}>
+                        <div className="btn-close-modal" onClick={() => handleCloseModal()}>
                             <i className="fal fa-times-circle"></i>
                         </div>
                     </header>
                     <section className="category-modal-content">
-                    <div className="search-category">
-                        <i className="fal fa-search"></i>
-                        <form className="search-wrapper">
-                            <input type="text" name="searchCategory" placeholder="Tìm kiếm sản phẩm theo tên..." value={changeText} onChange={handleChangeSearch}/>
-                        </form>
-                        {changeText ? 
-                            <div className="btn-remove" onClick={handleRemoveText}>
-                                <i className="fal fa-times-circle"></i>
-                            </div> : ''
-                        }
-                    </div>
-                    <ul className="product-list">
-                        {props.listProduct.length > 0 ? 
-                            props.listProduct.map(function(data, index) {
-                                const checkItem = listChooseProduct.filter(item => item.idProduct === data.idProduct);
-
-                                return <li className="product-row" key={index} onClick={(e) => handleClick(data.idProduct, e)}>
-                                            <div className="wrapper">
-                                                <div className="media-container">
-                                                    <img src={data.imageUrla} alt="NotImage"/>
-                                                </div>
-                                                <span>{data.nameProduct}</span>
-                                                <div className="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" className="check-list" />
-                                                        <span className={checkItem.length > 0 ? "checkbox-inner checked" : "checkbox-inner"} dt-target={data.idProduct} onClick={(e) => handleChecked(data.idProduct, e)}>
-                                                            <i className="fas fa-check"></i>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </li>
-                            })
-                        : 
-                            <li className="product-row-emty ">
-                                <h3>Không tìm thấy sản phẩm nào ở đây</h3>
-                            </li>
-                        }
-                    </ul>
+                    <MdCateSearch 
+                        handleSearch={props.handleSearch}
+                        handleRemoveText={handleRemoveText}
+                        hanldeSearchProduct={hanldeSearchProduct}
+                    />
+                    <MdCateProductList 
+                        listProduct={listProduct}
+                        listChooseProduct={stateListChecked}
+                        handleChooseItem={handleChooseItem}
+                    />
                     </section>
                     <div className="category-modal-footer">
-                        <div className="group-button">
-                            <div className="modal-cancel" onClick={handleCloseModal}>Hủy</div>
-                            <div className="modal-save" onClick={handleSubmitModal}>Thêm</div>
-                        </div>
+                        <MdCateControl handleSubmitModal={handleSubmitModal} handleCloseModal={closeModal}/>
                     </div>
                 </div>
             </div>

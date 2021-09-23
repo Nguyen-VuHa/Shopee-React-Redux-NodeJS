@@ -1,11 +1,16 @@
+import { unwrapResult } from '@reduxjs/toolkit';
 import adminApi from 'api/adminApi';
 import ToastMessage from 'components/ToastMessage/toastmessage';
-import { createCategory, updateCategory } from 'features/Admin/adminSlice';
+import { createCategory, updateCategory } from 'features/Admin/adminCategorySlice';
+import { getAllProducts } from 'features/Admin/adminProductSlice';
+import EditCateCard from 'features/Admin/components/CategoryComponents/EditCateCard';
+import EditCateControl from 'features/Admin/components/CategoryComponents/EditCateControl';
 import ModalCategory from 'features/Admin/components/ModalCategory';
+import { removeItemProduct } from 'features/Admin/components/ModalCategory/modalCategorySlice';
 import LoadingSubmit from 'features/Admin/components/ModalLoadingSubmit';
 import $ from 'jquery';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Input, Label } from 'reactstrap';
@@ -13,25 +18,22 @@ import SimpleBar from 'simplebar-react';
 import './customCategory.scss';
 
 const CustomCategory = () => {
+    const stateListChecked = useSelector((state) => state.modalChecked);
+    const stateListProduct = useSelector((state) => state.adProducts);
     const [isHandle, setisHandle] = useState(false);
     const [imageCategory, setimageCategory] = useState('');
-    const [listProduct, setlistProduct] = useState([]);
     const [listRender, setlistRender] = useState([]);
     const [showModal, setshowModal] = useState(false);
     const [nameCategory, setnameCategory] = useState('');
     const [isCategoryName, setisCategoryName] = useState(false);
-    let count = 0;
     const history = useHistory();
     const dispatch = useDispatch();
     const params = useParams();
-    
+
     useEffect(() => {
-        const fecthDataProduct = async () => {
-            const list = await adminApi.getProduct();
-            setlistProduct(list);
-        }
-        fecthDataProduct();
-    }, []);
+        const action = getAllProducts();
+        dispatch(action);
+    }, [dispatch]);
 
     useEffect(() => {
         const fecthCategoryById = async () => {
@@ -67,7 +69,6 @@ const CustomCategory = () => {
         }   
     }
 
-
     const handleLoadImage = () => {
         $('.choose-image').click();
     }
@@ -83,32 +84,17 @@ const CustomCategory = () => {
     }
 
     const handleCheckedSubmit = (values) => {
-    
         setlistRender(values);
         setshowModal(false);
     }
 
     const handleRemoveItem = (values) => {  
-        setlistRender(listRender.filter(item => item.idProduct !== values));
+        const action = removeItemProduct(values);
+        dispatch(action);
     }
 
     const handleCancelForm = () => {
         history.push('/admin/category');
-    }
-
-    const handleSearch = async (values) => {
-        const params = {
-            query_search: values
-        }
-        const fetchData = await adminApi.searchProduct(params);
-
-        if(fetchData.data.length > 0)
-        {
-           setlistProduct(fetchData.data);
-        }
-        else {
-            setlistProduct([]);
-        }
     }
 
     const nameProductChange = (e) => {
@@ -122,10 +108,12 @@ const CustomCategory = () => {
             let objectData = {
                 nameCategory: nameCategory,
                 imageCategory: imageCategory,
-                listProduct: listRender,
+                listProduct: stateListChecked,
             }
-            const resultFecth = await dispatch(createCategory(objectData));
-            if(resultFecth.payload.status === 'success')
+
+            const result = await dispatch(createCategory(objectData));
+            const messageResult = unwrapResult(result);
+            if(messageResult.status === 'success')
             {
                 toast.success(<ToastMessage title='Successfully!' message='Đã thêm bộ sưu tập!' type='success'/>);
                 setisHandle(false);
@@ -137,17 +125,19 @@ const CustomCategory = () => {
         }
     }
 
-    const handleSubmitUpdate = async (e) => {
+    const handleSubmitUpdate = async () => {
         if(nameCategory) {
             setisHandle(true);
             let objectData = {
                 idCategory: params.idCategory,
                 nameCategory: nameCategory,
                 imageCategory: imageCategory,
-                listProduct: listRender,
+                listProduct: stateListChecked,
             }
-            const resultFecth = await dispatch(updateCategory(objectData));
-            if(resultFecth.payload.status === 'success')
+            const result = await dispatch(updateCategory(objectData));
+            const messageResult = unwrapResult(result);
+            console.log(messageResult);
+            if(messageResult.status === 'success')
             {
                 toast.success(<ToastMessage title='Successfully!' message='Đã cập nhật thành công!' type='success'/>);
                 setisHandle(false);
@@ -166,52 +156,29 @@ const CustomCategory = () => {
                     <div className="ct-header"></div>
                     <div className="ct-content">
                         <div className="group-box ct-content__left">
-                            <div className="content-header">
-                                <div className="title-hd">
-                                    <div className="title">Sản phẩm trong bộ sưu tập</div>
-                                    <span>{listRender.length}</span>
-                                </div>
-                                {listRender.length > 0  ?  <div className="btn btn-hd-add" onClick={handleOpenModal}>
-                                                                <i className="fal fa-plus"></i>
-                                                                Thêm sản phẩm
-                                                            </div>
-                                : ''}
-                               
-                            </div>
+                            <EditCateControl stateListChecked={stateListChecked} handleOpenModal={handleOpenModal}/>
                             <div className="ct-wrapper-content">
-                                {listRender.length > 0 ?
-                                <div className="ct-body">
-                                    { 
-                                        listProduct.map(function(data, index) {
-                                            return listRender.filter(item => item.idProduct === data.idProduct).length > 0 
-                                            && <div className="ct-body__card" key={index}>
-                                                        <div className="card-header">
-                                                            <span className="index">{count += 1}</span>
-                                                            <div className="btn-circle btn-remove" onClick={() => handleRemoveItem(data.idProduct)}>
-                                                                <i className="fal fa-times"></i>
-                                                            </div>
-                                                        </div>
-                                                        <div className="card-bg">
-                                                            <img src={data.imageUrl} alt="NotImage"/>
-                                                        </div>
-                                                        <div className="card-shadow"></div>
-                                                        <div className="card-info">
-                                                            <div className="name-product">
-                                                                {data.nameProduct}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                        })
-                                    }
-                                </div>  
-                                : <div className="ct-empty">
-                                        <h3>Bắt đầu thêm sản phẩm vào bộ sưu tập</h3>
-                                        <span>Thêm một bộ sưu tập để hiển thị trên trang web của bạn.</span>
-                                        <div className="btn btn-add-ct" onClick={handleOpenModal}>
-                                            <i className="fal fa-plus"></i>
-                                            Thêm sản phẩm
+                                {stateListChecked.length > 0 ?
+                                    <div className="ct-body">
+                                        { 
+                                            stateListProduct.products.map(function(data, index) {
+                                                return stateListChecked.filter(id => id === data.idProduct).length > 0 &&
+                                                    <EditCateCard 
+                                                        key={index} 
+                                                        handleRemoveItem={handleRemoveItem} 
+                                                        index={index} data={data}
+                                                    />
+                                            })
+                                        }
+                                    </div>  
+                                    :   <div className="ct-empty">
+                                            <h3>Bắt đầu thêm sản phẩm vào bộ sưu tập</h3>
+                                            <span>Thêm một bộ sưu tập để hiển thị trên trang web của bạn.</span>
+                                            <div className="btn btn-add-ct" onClick={handleOpenModal}>
+                                                <i className="fal fa-plus"></i>
+                                                Thêm sản phẩm
+                                            </div>  
                                         </div>
-                                    </div>
                                 }
                             </div>
                         </div>
@@ -256,7 +223,6 @@ const CustomCategory = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    
                                 </div>
                             </div>
                         </div>
@@ -273,10 +239,8 @@ const CustomCategory = () => {
                     </div>
                 </form>
                 <ModalCategory 
-                    listProduct={listProduct} 
                     handleCheckedSubmit={handleCheckedSubmit} 
                     listRender={listRender} 
-                    handleSearch={handleSearch}
                     showModal={showModal}
                     setshowModal={setshowModal}
                 />
