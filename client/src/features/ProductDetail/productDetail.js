@@ -1,30 +1,33 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import productApi from "api/productApi";
 
-export const getListProduct = createAsyncThunk('shopAll/getListProduct', async () => {
+var initialState = {
+    products: [],
+    statusMesage: '',
+    loading: false,
+    error: '',
+}
+export const getAllProduct = createAsyncThunk('GET_ALL_PRODUCT_DETAIL', async () => {
     const message = await productApi.getListProduct();
     return message;
 })
 
 const productDetailApis = createSlice({
-    name: 'getlistproduct',
-    initialState: {
-        statusMesage: '',
-        loading: false,
-        error: '',
-    },
+    name: 'productDetail',
+    initialState: initialState,
     reducers: {},
     extraReducers: {
-        [getListProduct.pending]: (state) => {
+        [getAllProduct.pending]: (state) => {
             state.loading = true;
         },
-        [getListProduct.rejected]: (state, action) => {
+        [getAllProduct.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        [getListProduct.fulfilled]: (state, action) => {
+        [getAllProduct.fulfilled]: (state, action) => {
             state.loading = false;
-            state.statusMesage = action.payload;
+            state.products = action.payload;
+            state.statusMesage = 'OK';
         },
     }
 })

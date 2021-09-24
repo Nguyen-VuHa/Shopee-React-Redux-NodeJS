@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Link, NavLink } from 'react-router-dom';
 
 const HeaderDetail = (props) => {
-    
+
     return (
         <>
             <Helmet>

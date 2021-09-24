@@ -17,6 +17,10 @@ const productApi = {
         const url=`/api/search-product?query_search=${params}`;
         return axiosClient.get(url);
     },
+    getListProduct: () => {
+        const url=`/api/list-product`;
+        return axiosClient.get(url);
+    },
 }
 
 export default productApi;

@@ -6,6 +6,7 @@ import editProductReducers from 'features/Admin/pages/AddUpdateProducts/editSlic
 import adCategoryReducers from 'features/Admin/adminCategorySlice';
 import modalCheckedListReducers from 'features/Admin/components/ModalCategory/modalCategorySlice';
 import productsReducers from 'features/Product/productSlice';
+import productDetailReducers from 'features/ProductDetail/productDetail';
 
 const rootReducer = {
     registers: registerReducer,
@@ -15,6 +16,7 @@ const rootReducer = {
     adCategories: adCategoryReducers,
     modalChecked: modalCheckedListReducers,
     products: productsReducers,
+    productsDetail: productDetailReducers,
 }
 
 const store = configureStore({

@@ -23,6 +23,15 @@ function App() {
 	let accessToken = localStorage.getItem('accessToken');
 	const [isLogin, setisLogin] = useState(accessToken ? true : false);
 	const [intervals, setIntervals] = useState();
+	const [resizeWindow, setresizeWindow] = useState(window.innerWidth);
+
+	useEffect(() => {
+        window.addEventListener('resize', reportWindowSize);
+
+        function reportWindowSize() {
+            setresizeWindow(window.innerWidth);
+        }
+    }, []);
 
 	const handleShowCart = () => {
 		$('.md').addClass('animated');
@@ -35,22 +44,26 @@ function App() {
 	}
 
 	useEffect(() => {
-		var prevScrollpos = window.pageYOffset;
-		$(window).scroll(function() {
-			var currentScrollPos = window.pageYOffset;
-			if (prevScrollpos > currentScrollPos) {
-				$('.header').css('top','0%');
-			} else {
-				$('.header').css('top','-100%');
-			}
-			prevScrollpos = currentScrollPos;
-
-			if(window.pageYOffset === 0)
-			{
-				$('.header').css('top','0%');
-			}
-		})
-	
+		if(resizeWindow < 600) 
+		{
+			$('.header').css('top','0%');
+		}
+		else {
+			var prevScrollpos = window.pageYOffset;
+			$(window).scroll(function() {
+				var currentScrollPos = window.pageYOffset;
+				if (prevScrollpos > currentScrollPos) {
+					$('.header').css('top','0%');
+				} else {
+					$('.header').css('top','-100%');
+				}
+				prevScrollpos = currentScrollPos;
+				if(window.pageYOffset === 0)
+				{
+					$('.header').css('top','0%');
+				}
+			})
+		}
 	});
 
 	const handleisLogin = (values) => {

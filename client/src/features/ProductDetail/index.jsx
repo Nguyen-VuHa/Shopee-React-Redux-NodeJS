@@ -1,38 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { BrowserRouter, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
-import ContentDetail from './components/Content';
-import HeaderDetail from './components/Header';
+import { Switch } from 'react-router-dom';
+import MainDetailProduct from './pages/MainProductDetail';
 import './product-detail.scss';
-import { getListProduct } from './productDetail';
+import { getAllProduct } from './productDetail';
+
 
 const ProductDetail = () => {
-    const [listProduct, setlistProduct] = useState([]);
     const dispatch = useDispatch();
-    const match = useRouteMatch();
     
     useEffect(() => {
-        const fectDataProduct = async () => {
-            const data = await dispatch(getListProduct());
-            setlistProduct(data.payload);
-        }
-        fectDataProduct();
+       const action = getAllProduct();
+       dispatch(action);
     }, [dispatch]);
 
     return (
         <>
             <div className="container ip-content">
                 <Switch>
-                    {
-                        listProduct.length > 0 ?  
-                            listProduct.map(function(data, index) {
-                                return  <Route exact path={`${match.path}/${data.nameProduct.replaceAll(' ', '-')}`} key={index}>
-                                            <HeaderDetail indexList={index} totalIndex={listProduct.length} listProduct={data} allProduct={listProduct}/>
-                                            <ContentDetail listProduct={data} />
-                                        </Route>
-                            })        
-                        : ''
-                    }
+                   <MainDetailProduct />
                 </Switch>
             </div>
         </>

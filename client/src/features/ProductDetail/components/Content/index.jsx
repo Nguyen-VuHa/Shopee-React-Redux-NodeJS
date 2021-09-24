@@ -5,8 +5,8 @@ import {
 } from "react-image-magnifiers";
 import { UncontrolledCollapse } from 'reactstrap';
 
-
 const ContentDetail = (props) => {
+    const { listProduct } = props;
     const [countProduct, setcountProduct] = useState(1);
     
     useEffect(() => {
@@ -35,23 +35,23 @@ const ContentDetail = (props) => {
             <div className="pdt-item">
                 <div className="product-img">
                     <SideBySideMagnifier 
-                        imageSrc={props.listProduct && props.listProduct.urlImage} 
+                        imageSrc={listProduct && listProduct.urlImage} 
                         imageAlt="NotImage"
-                        largeImageSrc={props.listProduct && props.listProduct.urlImage} 
+                        largeImageSrc={ listProduct && listProduct.urlImage} 
                         alwaysInPlace={true}
                         fillAvailableSpace={true}
                     />
                 </div>
                 <div className="product-desc">
-                    {props.listProduct && props.listProduct.descProduct}
+                    { listProduct && listProduct.descProduct}
                 </div>
             </div>
             <div className="pdt-item">
                 <div className="name-product">
-                    {props.listProduct && props.listProduct.nameProduct}
+                    {listProduct && listProduct.nameProduct}
                 </div>
                 <div className="price-product">
-                    {props.listProduct && props.listProduct.price.toLocaleString()} đ
+                    {listProduct && listProduct.price.toLocaleString()} đ
                 </div>
                 <div className="count-product">
                     <div>Số lượng</div>
@@ -68,8 +68,8 @@ const ContentDetail = (props) => {
                     <div className="btn btn-buy">Mua Ngay</div>
                 </div>
                 <div className="group-desc">
-                    {props.listProduct && props.listProduct.additional.length > 0 ? 
-                        props.listProduct.additional.map(function(data, index) {
+                    {listProduct && listProduct.additional.length > 0 ? 
+                        listProduct.additional.map(function(data, index) {
                             return <div className="group-item" key={index}>
                                         <button className="btn btn-desc" id={`desc${data.id}`}>
                                             <div className="name">{data.title}</div>
