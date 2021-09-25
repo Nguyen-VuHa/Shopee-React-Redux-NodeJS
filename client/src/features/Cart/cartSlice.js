@@ -1,55 +1,71 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import cartsApi from "api/cartsApi";
 
-export const getCarts = createAsyncThunk('Header/getCarts', async (thunkApi) => {
-    const messageUpdate = await cartsApi.getCarts(thunkApi);
-    return messageUpdate;
+var initialState = {
+    listCart: [],
+    statusMesage: '',
+    loading: false,
+    error: '',
+}
+
+export const getProductInCarts = createAsyncThunk('GET_PRODUCT_CART', async (thunkApi) => {
+    const stateReponse = await cartsApi.getCarts(thunkApi);
+    return stateReponse;
 })
 
-export const plusCarts = createAsyncThunk('Header/plusCarts', async (thunkApi) => {
-    const messagePlusCount = await cartsApi.plusCount(thunkApi.accessToken, thunkApi.idCarts);
-    return messagePlusCount;
+export const addItemInCarts = createAsyncThunk('ADD_ITEM_CART', async (thunkApi) => {
+    const stateReponse = await cartsApi.addCarts(thunkApi);
+    return stateReponse;
 })
 
-export const minusCarts = createAsyncThunk('Header/minusCarts', async (thunkApi) => {
-    const messageMinusCount = await cartsApi.minusCount(thunkApi.accessToken, thunkApi.idCarts);
-    return messageMinusCount;
+export const plusCarts = createAsyncThunk('PLUS_COUNT_CART', async (thunkApi) => {
+    const stateReponse = await cartsApi.plusCount(thunkApi.accessToken, thunkApi.idCarts);
+    return stateReponse;
 })
 
-export const removeCarts = createAsyncThunk('Header/removeCarts', async (thunkApi) => {
+export const minusCarts = createAsyncThunk('MINUS_COUNT_CART', async (thunkApi) => {
+    const stateReponse = await cartsApi.minusCount(thunkApi.accessToken, thunkApi.idCarts);
+    return stateReponse;
+})
+
+export const removeCarts = createAsyncThunk('REMOVE_ITEM_CART', async (thunkApi) => {
     const messageRemoveItem = await cartsApi.removeItemCarts(thunkApi.accessToken, thunkApi.idCarts);
     return messageRemoveItem;
 })
 
 
 const cartApi = createSlice({
-    name: 'getCarts',
-    initialState: {
-        listCarts: getCarts.payload,
-    },
+    name: 'carts',
+    initialState: initialState,
     reducers: {},
     extraReducers: {
-        [getCarts.pending]: (state) => {
+        // GET ITEM PRODUCT IN CART
+        [getProductInCarts.pending]: (state) => {
             state.loading = true;
         },
-        [getCarts.rejected]: (state, action) => {
+        [getProductInCarts.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        [getCarts.fulfilled]: (state, action) => {
+        [getProductInCarts.fulfilled]: (state, action) => {
             state.loading = false;
-            state.statusMesage = action.payload;
+            state.listCart = action.payload;
+            state.statusMesage = 'OK';
         },
-    }
-},{
-    name: 'plusCarts',
-    initialState: {
-        statusMesage: '',
-        loading: false,
-        error: '',
-    },
-    reducers: {},
-    extraReducers: {
+        // ADD ITEM CART
+        [addItemInCarts.pending]: (state) => {
+            state.loading = true;
+        },
+        [addItemInCarts.rejected]: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
+        [addItemInCarts.fulfilled]: (state, action) => {
+            console.log(action);
+            state.loading = false;
+            state.statusMesage = 'OK';
+        },
+        // PLUS COUNT ITEM CART
         [plusCarts.pending]: (state) => {
             state.loading = true;
         },
@@ -61,16 +77,7 @@ const cartApi = createSlice({
             state.loading = false;
             state.statusMesage = action.payload;
         },
-    }
-},{
-    name: 'minusCarts',
-    initialState: {
-        statusMesage: '',
-        loading: false,
-        error: '',
-    },
-    reducers: {},
-    extraReducers: {
+        // MINUS COUNT ITEM CART 
         [minusCarts.pending]: (state) => {
             state.loading = true;
         },
@@ -82,16 +89,7 @@ const cartApi = createSlice({
             state.loading = false;
             state.statusMesage = action.payload;
         },
-    }
-},{
-    name: 'removeItemCarts',
-    initialState: {
-        statusMesage: '',
-        loading: false,
-        error: '',
-    },
-    reducers: {},
-    extraReducers: {
+        // REMOVE ITEM CART
         [removeCarts.pending]: (state) => {
             state.loading = true;
         },
@@ -101,10 +99,11 @@ const cartApi = createSlice({
         },
         [removeCarts.fulfilled]: (state, action) => {
             state.loading = false;
-            state.statusMesage = action.payload;
+            state.statusMesage = action.payload.status;
+            state.listCart = action.payload.data;
         },
     }
 })
 
-const  { reducer } = cartApi;
+const  { reducer, actions } = cartApi;
 export default reducer;

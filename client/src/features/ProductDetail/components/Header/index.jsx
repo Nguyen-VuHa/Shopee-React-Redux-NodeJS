@@ -8,7 +8,7 @@ const HeaderDetail = (props) => {
     return (
         <>
             <Helmet>
-                <title>{props.listProduct.nameProduct}</title>
+                <title>{props.listProduct.nameProduct} | BIBI Korea</title>
             </Helmet>
             <div className="pdt-header">
                 <div className="path">

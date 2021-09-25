@@ -16,6 +16,12 @@ class CartController {
         res.json(data);
     }
 
+    async setItemCart (req, res) {
+        console.log(req.body);
+
+        res.json('OKE');
+    }
+
     async plusCart (req, res) {
         const idUser = req.userId;
         const { idCarts } =  req.params;
@@ -60,7 +66,16 @@ class CartController {
             }
         })
 
-        res.json({status: 'success'});
+        const data = await Carts.findAll({
+            where: {
+                Carts_idUser: idUser
+            },
+            include: [
+                Products
+            ]
+        });
+        console.log(data);
+        res.json({status: 'success', data});
     }
 }
 

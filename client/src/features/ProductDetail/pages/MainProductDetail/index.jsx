@@ -1,9 +1,9 @@
 import ContentDetail from 'features/ProductDetail/components/Content';
 import HeaderDetail from 'features/ProductDetail/components/Header';
+import $ from 'jquery';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, useRouteMatch } from 'react-router';
-import $ from 'jquery';
 
 const MainDetailProduct = () => {
     const state = useSelector((state) => state.productsDetail);

@@ -9,6 +9,14 @@ const cartsApi = {
             } 
         });
     },
+    addCarts: (accesToken, data) => {
+        const url =  `/api/carts/add-item`;
+        return axiosClient.post(url, JSON.stringify(data) , {
+            headers: {
+                'Authorization':`Baeber ${accesToken}` 
+            } 
+        });
+    },
     plusCount: (accesToken, idCart) => {
         const url =  `/api/carts/plus/${idCart}`;
         return axiosClient.get(url, {
