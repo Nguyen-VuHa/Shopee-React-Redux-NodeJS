@@ -13,7 +13,7 @@ const Product = db.define('SANPHAM', {
         allowNull: false
     },
     descProduct: {
-        type: DataTypes.STRING(1000),
+        type: DataTypes.STRING(3000),
         allowNull: true
     },
     price: {
@@ -23,11 +23,7 @@ const Product = db.define('SANPHAM', {
     status: {
         type: DataTypes.INTEGER,
         allowNull: false
-    },
-    imageUrl: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+    }
 });
 
 Product.findByNameProduct = async function (nameProduct) {
@@ -38,9 +34,6 @@ Product.findByNameProduct = async function (nameProduct) {
     });
 }
 
-Product.findByIdProduct = async function (idProduct) {
-    return Product.findByPk(idProduct);
-}
 
 Product.finbByAll = async function () {
     return Product.findAll();

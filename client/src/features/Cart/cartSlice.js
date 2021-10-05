@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 import cartsApi from "api/cartsApi";
 
 var initialState = {
@@ -33,11 +33,19 @@ export const removeCarts = createAsyncThunk('REMOVE_ITEM_CART', async (thunkApi)
     return messageRemoveItem;
 })
 
+const cartAdapter = createEntityAdapter({
+    selectId: (cart) => cart.idCarts,
+})
 
 const cartApi = createSlice({
     name: 'carts',
-    initialState: initialState,
-    reducers: {},
+    initialState: cartAdapter.getInitialState(initialState),
+    reducers: {
+        addItemCart: (state, action) => {
+            console.log(state.listCart, action);
+            return state;
+        }
+    },
     extraReducers: {
         // GET ITEM PRODUCT IN CART
         [getProductInCarts.pending]: (state) => {
@@ -49,7 +57,7 @@ const cartApi = createSlice({
         },
         [getProductInCarts.fulfilled]: (state, action) => {
             state.loading = false;
-            state.listCart = action.payload;
+            cartAdapter.setAll(state, action.payload);
             state.statusMesage = 'OK';
         },
         // ADD ITEM CART
@@ -61,9 +69,8 @@ const cartApi = createSlice({
             state.error = action.payload;
         },
         [addItemInCarts.fulfilled]: (state, action) => {
-            console.log(action);
             state.loading = false;
-            state.statusMesage = 'OK';
+            state.statusMesage = action.payload;
         },
         // PLUS COUNT ITEM CART
         [plusCarts.pending]: (state) => {
@@ -105,5 +112,10 @@ const cartApi = createSlice({
     }
 })
 
+export const cartSelectors = cartAdapter.getSelectors(
+    (state) => state.cart
+)
+
 const  { reducer, actions } = cartApi;
+export const { addItemCart } = actions;
 export default reducer;

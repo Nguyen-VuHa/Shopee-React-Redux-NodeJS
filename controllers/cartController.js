@@ -17,9 +17,28 @@ class CartController {
     }
 
     async setItemCart (req, res) {
-        console.log(req.body);
+        const idUser = req.userId;
+        const { idProduct, countProduct } = req.body;
+        const checkedItem = await Carts.findOne({
+            where: {
+                Carts_idProduct: idProduct,
+                Carts_idUser: idUser,
+            },
+        })
 
-        res.json('OKE');
+        if(checkedItem) {
+            checkedItem.countProduct += countProduct;
+
+            checkedItem.save();
+        }
+        else {
+            Carts.create({
+                countProduct: countProduct,
+                Carts_idUser: idUser,
+                Carts_idProduct: idProduct,
+            });
+        }
+        res.json({status: 'success'});
     }
 
     async plusCart (req, res) {

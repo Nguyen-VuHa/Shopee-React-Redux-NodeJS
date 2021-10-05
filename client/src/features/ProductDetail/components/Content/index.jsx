@@ -1,13 +1,18 @@
+import { addItemCart, addItemInCarts } from 'features/Cart/cartSlice';
+import { openCart } from 'features/Cart/isShowCartSlice';
 import $ from 'jquery';
 import React, { useEffect, useState } from 'react';
 import {
     SideBySideMagnifier
 } from "react-image-magnifiers";
+import { useDispatch, useSelector } from 'react-redux';
 import { UncontrolledCollapse } from 'reactstrap';
 
 const ContentDetail = (props) => {
     const { listProduct } = props;
     const [countProduct, setcountProduct] = useState(1);
+    const accessToken = localStorage.getItem('accessToken');
+    const dispatch = useDispatch();
     
     useEffect(() => {
         $('.btn-desc').on('click', function() {
@@ -28,6 +33,25 @@ const ContentDetail = (props) => {
 
     const handleMinusCount = () => {
         setcountProduct(countProduct - 1);
+    }
+    
+    const handleAddToCart = () => {
+        if(accessToken) {
+            const actionAdd = addItemCart(listProduct);
+            dispatch(actionAdd);
+
+            const action = addItemInCarts({
+                accessToken,
+                data: {
+                    idProduct: listProduct.idProduct,
+                    countProduct: countProduct
+                }
+            });
+            dispatch(action);
+
+            const actionShowCart = openCart();
+            dispatch(actionShowCart);
+        }
     }
 
     return (
@@ -64,7 +88,10 @@ const ContentDetail = (props) => {
                     </div>
                 </div>
                 <div className="group-button">
-                    <div className="btn btn-cart">Thêm vào giỏ hàng</div>
+                    <div 
+                        className="btn btn-cart"
+                        onClick={() => handleAddToCart()}
+                    >Thêm vào giỏ hàng</div>
                     <div className="btn btn-buy">Mua Ngay</div>
                 </div>
                 <div className="group-desc">

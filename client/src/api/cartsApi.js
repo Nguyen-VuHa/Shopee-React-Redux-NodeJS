@@ -1,43 +1,43 @@
 const { default: axiosClient } = require("./clientAxios");
 
 const cartsApi = {
-    getCarts: (accesToken) => {
+    getCarts: (accessToken) => {
         const url =  `/api/carts`;
         return axiosClient.get(url,{
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Baeber ${accessToken}` 
             } 
         });
     },
-    addCarts: (accesToken, data) => {
+    addCarts: (objectData) => {
         const url =  `/api/carts/add-item`;
-        return axiosClient.post(url, JSON.stringify(data) , {
+        return axiosClient.post(url, JSON.stringify(objectData.data) , {
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Baeber ${objectData.accessToken}` 
             } 
         });
     },
-    plusCount: (accesToken, idCart) => {
+    plusCount: (accessToken, idCart) => {
         const url =  `/api/carts/plus/${idCart}`;
         return axiosClient.get(url, {
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Baeber ${accessToken}` 
             } 
         });
     },
-    minusCount: (accesToken, idCart) => {
+    minusCount: (accessToken, idCart) => {
         const url =  `/api/carts/minus/${idCart}`;
         return axiosClient.get(url ,{
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Baeber ${accessToken}` 
             } 
         });
     },
-    removeItemCarts: (accesToken, idCart) => {
+    removeItemCarts: (accessToken, idCart) => {
         const url =  `/api/carts/remove/${idCart}`;
         return axiosClient.get(url ,{
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Baeber ${accessToken}` 
             } 
         });
     },

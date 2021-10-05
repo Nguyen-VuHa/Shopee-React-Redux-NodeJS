@@ -9,6 +9,7 @@ import productsReducers from 'features/Product/productSlice';
 import productDetailReducers from 'features/ProductDetail/productDetail';
 import cartReducers from 'features/Cart/cartSlice';
 import totalPriceCartReducers from 'features/Cart/totalPriceSlice';
+import isShowCartReducers from 'features/Cart/isShowCartSlice';
 
 const rootReducer = {
     registers: registerReducer,
@@ -21,6 +22,7 @@ const rootReducer = {
     productsDetail: productDetailReducers,
     carts: cartReducers,
     totalPriceCart: totalPriceCartReducers,
+    isShowCart: isShowCartReducers,
 }
 
 const store = configureStore({

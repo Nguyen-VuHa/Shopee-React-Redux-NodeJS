@@ -1,172 +1,146 @@
 const { Category, CateProduct } = require('../models/bosuutap');
 const Product = require('../models/sanpham');
-const Additional = require('../models/thongtinbosung');
+const ImageProduct = require('../models/hinhanh_sanpham');
 const { cloudinary } = require('../untils/cloudinary');
 
 class ProductController { 
 
     // [GET] /product
     async getAllProduct(req, res) {
-        const product = await Product.findAll();
-        res.json(product);
-    }
-
-      // [GET] /list-product
-      async getListProduct(req, res) {
         const product = await Product.findAll({
-            include: [Additional]
+            include: [ImageProduct]
         });
-        const arrayData =  [];
-
-        if(product) {
-            product.forEach(item => {
-                let object = {
-                    idProduct: item.idProduct,
-                    urlImage: item.imageUrl,
-                    nameProduct: item.nameProduct,
-                    price: item.price,
-                    descProduct: item.descProduct,
-                    status: item.status,
-                    additional: item.THONGTINBOSUNGs,
-                }
-
-                arrayData.push(object);
-            })
-        }
-        
-        res.json(arrayData);
+        res.json(product);
     }
 
     // [POST] /product/new-product
     async postProduct(req, res) {
-        const {info , imageB64, additional} = req.body;
+        const { data, arrayImage } = req.body;
         try {
-            const uploadResponse = await cloudinary.uploader.upload(imageB64, {
-                upload_preset: 'product_image',
-            });
+            const product = await Product.findByNameProduct(data.name);
+            if(product) return res.json({status: 'Warning', message: 'Product already exists!'});
 
-            const product = await Product.findByNameProduct(info.nameProduct);
-
-            if(product) return res.json({status: 'failed', message: 'Product already exists!'})
+            var arrayUrl = [];
+            for(var i = 0; i < arrayImage.length; i++) {
+                var uploadResponse = await cloudinary.uploader.upload(arrayImage[i], {
+                    upload_preset: 'product_image',
+                });
+                arrayUrl.push(uploadResponse.url);
+            }
 
             await Product.create({
-                nameProduct: info.nameProduct,
-                descProduct: info.descProdcut,
-                price: info.price,
-                imageUrl: uploadResponse.url,
-                status: 1,
+                nameProduct: data.name,
+                descProduct: data.description,
+                price: data.price,
+                status: data.checked,
             });
 
-            if(additional.length > 0)
-            {
-                const isKeyProduct = await Product.findByNameProduct(info.nameProduct);
-
-                additional.forEach(item => {
-                    Additional.create({
-                        title: item.title,
-                        desc: item.desc,
-                        idProduct: isKeyProduct.idProduct,
+            const isKeyProduct = await Product.findByNameProduct(data.name);
+            if(arrayUrl.length > 0) {
+                for(var item in arrayUrl) {
+                    await ImageProduct.create({
+                        imageUrl: arrayUrl[item],
+                        Image_idProduct: isKeyProduct.idProduct,
                     });
-                });           
-                res.sendStatus(200);
+                }    
             }
-            else {
-                res.sendStatus(200);
-            }
+
+            const producReponse = await Product.findOne({
+                where: {
+                    idProduct: isKeyProduct.idProduct
+                },
+                include: [ImageProduct]
+            });
+            res.json({status: 'OK', producReponse });
         }
         catch (err) {
             console.log(err);
             res.json(err)
         }
-    
+    }
+
+    // [POST] /product/update-status
+    async updateStatusProduct (req, res) {
+        const { idProduct } = req.body;
+
+        const data = await Product.findByPk(idProduct);
+        data.status = data.status === 1 ? 0 : 1;
+        data.save();
+
+        res.json({status: 'Success'});
     }
 
     // [GET] /product/:idProduct
     async getProductById(req, res) {
         const { idProduct } = req.params;
         
-        const product = await Product.findByIdProduct(idProduct);
-        const additional = await Additional.findByIdProduct(idProduct);
+        const product = await Product.findByPk(idProduct, {
+            include: [ImageProduct],
+        });
 
-        const object = {
-            product: product,
-            additional: additional,
-        }
-
-        res.json(object);
+        res.json(product);
     }
+
     // [POST]  /product/update/:idProduct
     async postUpdateProduct(req, res) {
         const { idProduct } = req.params;
-        const {info , imageB64, additional} = req.body;
-        let urlImage = '';
+        const { data ,arrayImage } = req.body;
+        var arrayUrl = [];
+
         
-        if(imageB64.includes('http'))
-        {
-            urlImage = imageB64;
-        }
-        else {
-            try {
-                const uploadResponse = await cloudinary.uploader.upload(imageB64, {
-                    upload_preset: 'product_image',
-                });
-    
-                urlImage = uploadResponse.url;
-            }
-            catch(err) {
-                console.log(err);
-                return;
-            }
+        if(arrayImage.length > 0) {
+            await ImageProduct.destroy({
+                where: {
+                    Image_idProduct: idProduct
+                }
+            });
         }
 
-        await Product.update({
-            nameProduct: info.nameProduct,
-            descProduct: info.descProdcut,
-            price: info.price,
-            imageUrl: urlImage,
-        }, {
-            where: {
-                idProduct: idProduct,
+        try {
+            for(var index in arrayImage) { 
+                if(arrayImage[index].includes('http'))
+                    arrayUrl.push(arrayImage[index]);
+                else {
+                    const uploadResponse = await cloudinary.uploader.upload(arrayImage[index], {
+                        upload_preset: 'product_image',
+                    });
+                    arrayUrl.push(uploadResponse.url);
+                }
             }
-        })
 
-        await Additional.remomveByIdProduct(idProduct);
-        
-        if(additional.length > 0)
-        {
-            additional.forEach(item => {
-                Additional.create({
-                    title: item.title,
-                    desc: item.desc,
+            await Product.update({
+                nameProduct: data.name,
+                descProduct: data.description,
+                price: data.price,
+                status: data.checked,
+            }, {
+                where: {
                     idProduct: idProduct,
-                });
-            });           
-            res.sendStatus(200);
+                }
+            });
+
+            if(arrayUrl.length > 0) {
+                for(var item in arrayUrl) {
+                    await ImageProduct.create({
+                        imageUrl: arrayUrl[item],
+                        Image_idProduct: idProduct,
+                    });
+                }    
+            }
         }
-        else {
-            res.sendStatus(200);
+        catch (err) {
+            console.log(err);
+            res.json(err);
         }
+        res.json({status: 'OK'});
     }
 
     // [GET] /product/search?query_search...
     async getProductByQuery (req, res) {
         const { query_search } = req.query;
         const dataSearch = await Product.filterByProductName(query_search);
-        const arrayData = [];
-
-        if(dataSearch) {
-            dataSearch.forEach(item => {
-                let object = {
-                    idProduct: item.idProduct,
-                    imageUrl: item.imageUrl,
-                    nameProduct: item.nameProduct,
-                    price: item.price,
-                    status: item.status,
-                }
-                arrayData.push(object);
-            })
-        }
-        res.json({status: 'success', data: arrayData});
+     
+        res.json({status: 'success', data: dataSearch});
     }
 
 }

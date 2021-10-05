@@ -19,7 +19,6 @@ import './responsive.scss';
 const HomePage = React.lazy(() => import('features/HomePage')); 
 
 function App() {
-	const [modalCart, setModalCart] = useState(false);
 	let accessToken = localStorage.getItem('accessToken');
 	const [isLogin, setisLogin] = useState(accessToken ? true : false);
 	const [intervals, setIntervals] = useState();
@@ -32,16 +31,6 @@ function App() {
             setresizeWindow(window.innerWidth);
         }
     }, []);
-
-	const handleShowCart = () => {
-		$('.md').addClass('animated');
-		setModalCart(!modalCart);
-	}
-
-	const handleHideCart = () => {
-		$('.md').removeClass('animated');
-		setModalCart(!modalCart);
-	}
 
 	useEffect(() => {
 		if(resizeWindow < 600) 
@@ -91,24 +80,24 @@ function App() {
 			<Suspense fallback={<LoadingPage />} >
 				<BrowserRouter>
 					<Switch>
-					
+
 						<Route exact path="/">
-							<Cart isShowModal={modalCart} handleCart={handleHideCart} setModalCart={setModalCart} />
-							<Header handleCart={handleShowCart} status={isLogin} handleisLogout={handleisLogout} />
+							<Header status={isLogin} handleisLogout={handleisLogout} />
+							<Cart />
 							<HomePage />
 							<Footer />
 						</Route>
 
 						<Route exact path="/shop-all">
-							<Cart isShowModal={modalCart} handleCart={handleHideCart} setModalCart={setModalCart} />
-							<Header handleCart={handleShowCart} status={isLogin} handleisLogout={handleisLogout} />
+							<Header status={isLogin} handleisLogout={handleisLogout} />
+							<Cart />
 							<ProductStore />
 							<Footer />
 						</Route>
 
 						<Route path="/product-page">
-							<Cart isShowModal={modalCart} handleCart={handleHideCart} setModalCart={setModalCart} />
-							<Header handleCart={handleShowCart} status={isLogin} handleisLogout={handleisLogout} />
+							<Header status={isLogin} handleisLogout={handleisLogout} />
+							<Cart />
 							<ProductDetail />
 							<Footer />
 						</Route>

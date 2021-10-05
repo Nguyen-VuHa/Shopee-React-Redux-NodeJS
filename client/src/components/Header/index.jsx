@@ -1,17 +1,16 @@
 import $ from 'jquery';
-import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Notification from './components/HeaderNotify';
 import './header.scss';
 import Images from 'constants/images';
-import { useDispatch } from 'react-redux';
-import { getCarts } from './headerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { openCart } from 'features/Cart/isShowCartSlice';
 
 const Header = (props) => {
-    const { handleCart, status, handleisLogout} = props;
+    const { status, handleisLogout } = props;
+    const stateCart = useSelector((state) => state.carts);
     const [listNotify, setlistNotify] = useState([]);
-    const [listCart, setlistCart] = useState([]);
     let infoUser = JSON.parse(localStorage.getItem('info-user'));
     const dispath = useDispatch();
 
@@ -50,17 +49,6 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        if(status) {
-            const getCart = async () => {
-                const accesToken =  localStorage.getItem('accessToken');
-                const data = await dispath(getCarts(accesToken));
-                setlistCart(data.payload);
-            }
-            getCart();
-        }
-    }, []);
-
-    useEffect(() => {
         $('.menu-btn').on('click', function() {
             $('.container').addClass('show');
         })
@@ -73,6 +61,11 @@ const Header = (props) => {
             $('.container').removeClass('show');
         })
     }, []);
+
+    const handleOpenCart = () => {
+        const action = openCart();
+        dispath(action);
+    }
     
     return (
         <header className="header">
@@ -135,9 +128,12 @@ const Header = (props) => {
                                 <Notification handleNotifyClick={handleNotifyClick} listNotify={listNotify} />
                                 <div className="header-cart">
                                     <div className="cart" >
-                                        <i className="far fa-shopping-cart" onClick={handleCart}></i>
-                                        {listCart.length > 0 ? 
-                                            <span>{listCart.length}</span>
+                                        <i 
+                                            className="far fa-shopping-cart" 
+                                            onClick={() => handleOpenCart()}
+                                        ></i>
+                                        {stateCart.listCart.length > 0 ? 
+                                            <span>{stateCart.listCart.length}</span>
                                          : ''}
                                             <div>Giỏ hàng</div>
                                     </div>
@@ -194,16 +190,7 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-    handleCart: PropTypes.func,
-    handleisLogout: PropTypes.func,
-    status: PropTypes.bool,
+
 }
-
-Header.defaultProps = {
-    handleCart: null,
-    handleisLogout: null,
-}
-
-
 
 export default Header;

@@ -7,44 +7,60 @@ class categoryController {
     async newCategory(req, res) {
         const { nameCategory, imageCategory, listProduct } = req.body;
         var uploadResponse = '';
-        try {
-            if(imageCategory) {
-                uploadResponse = await cloudinary.uploader.upload(imageCategory, {
-                    upload_preset: 'category_image',
-                });
-            }
 
-            try{
+        const checkNameCategory = await Category.findAll({
+            where: {
+                nameCategory: nameCategory,
+            }
+        })
+
+        if(checkNameCategory.length > 0) {
+            res.json({warning: 'warning', message: 'Category Name Already Exists!'})
+        }
+        else {
+            try {
+                if (imageCategory) {
+                    uploadResponse = await cloudinary.uploader.upload(imageCategory, {
+                        upload_preset: 'category_image',
+                    });
+                }
+    
                 let category = await Category.create({
                     nameCategory: nameCategory,
                     imageUrl: uploadResponse?.url,
                 });
         
-                for (var i = 0; i < listProduct.length; i++) {
-                    let temp = await Product.findByIdProduct(listProduct[i]);
+                for (var i in listProduct) {
+                    let temp = await Product.findByPk(listProduct[i]);
                     category.addSANPHAM(temp);
                 }
+
+                const dataReponse = await Category.findOne({
+                    include: [Product],
+                    where: {
+                        nameCategory: nameCategory,
+                    }
+                })
                 
-                res.json({status: 'success'});
-            }
-            catch (err) {
-                res.json({error: err});
+                res.json({status: 'OK', dataReponse: {
+                    idCategory: dataReponse.idCategory,
+                    nameCategory: dataReponse.nameCategory,
+                    urlImage: dataReponse.imageUrl,
+                    countProduct: listProduct.length,
+                }});
+
+            } catch (err) {
+                console.log(err);
             }
         }
-        catch(err) {
-            console.log(err);
-        }
-       
     }
 
     // [GET] /category
-    async getCategory(req, res) {
+    async getAllCategory(req, res) {
         const data = await Category.findAll({  include: {
             model: Product,
           }});
         const objData = [];
-
-        const countProduct = await Product.findAll();
 
         data.forEach(item => {
             objData.push({
@@ -55,10 +71,7 @@ class categoryController {
             })
         })
  
-        res.json({
-            objData: objData,
-            countProduct: countProduct.length
-        });
+        res.json(objData);
     }
 
     // [GET] /category/shop-all
@@ -81,7 +94,7 @@ class categoryController {
         res.json(objData);
     }
 
-    // [POST] /category/delete/:idCategory
+    // [GET] /category/delete/:idCategory
     async deleteCategory(req, res) {
         const { idCategory } = req.params;
         try {
@@ -91,7 +104,7 @@ class categoryController {
                 },
                 include: [Product]
             });
-            res.json({status: 'success'})
+            res.json({status: 'OK'})
         }
         catch(err) {
             res.json({error: err})
@@ -160,10 +173,14 @@ class categoryController {
         }
         else {
             try {
-                const uploadResponse = await cloudinary.uploader.upload(imageCategory, {
-                    upload_preset: 'category_image',
-                });
-                imageUrl = uploadResponse.url;
+                if(imageCategory) {
+                    const uploadResponse = await cloudinary.uploader.upload(imageCategory, {
+                        upload_preset: 'category_image',
+                    });
+                    imageUrl = uploadResponse.url;
+                }
+                else
+                    imageUrl = '';
             }
             catch(err) {
                 console.log(err)
@@ -186,12 +203,25 @@ class categoryController {
                 }
             })
 
-            for (var i = 0; i < listProduct.length; i++) {
-                let temp = await Product.findByIdProduct(listProduct[i]);
+            for (var i in listProduct) {
+                let temp = await Product.findByPk(listProduct[i]);
                 category.addSANPHAM(temp);
             }
+
+            const data = await Category.findOne({
+                include: [Product],
+                where: {
+                    idCategory: idCategory,
+                }
+            })
             
-            res.json({status: 'success'});
+            res.json({status: 'OK', dataReponse: {
+                idCategory: data.idCategory,
+                nameCategory: data.nameCategory,
+                urlImage: data.imageUrl,
+                countProduct: listProduct.length,
+            }});
+
         }
         catch(err) {
             res.json({error: err})

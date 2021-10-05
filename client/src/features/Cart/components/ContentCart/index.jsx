@@ -4,24 +4,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import ItemCart from '../ItemCart';
 
 
-const ContentCart = (props) => {
-    const { handleClickImage, isShowModal } = props;
+const ContentCart = () => {
     const stateCart = useSelector((state) => state.carts);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if(isShowModal) {
+        if(!stateCart.loading) {
             const action = setTotalPrice(stateCart?.listCart);
             dispatch(action);
         }
-    }, [dispatch, isShowModal]);
+    }, [dispatch, stateCart?.listCart]);
 
     return (
         <div className="content-cart" >
             { stateCart?.listCart.length > 0 ? 
                     stateCart?.listCart.length > 0 ?
-                        stateCart?.listCart.map(function(data, index) {
-                        return <ItemCart key={data.id} data={data} handleClickImage={handleClickImage} />
+                        stateCart?.listCart.map(function(data) {
+                        return <ItemCart key={data.id} data={data} />
                             }) : '' 
             :
             <span>

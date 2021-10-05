@@ -1,14 +1,20 @@
-import { getProductInCarts, minusCarts, plusCarts, removeCarts } from 'features/Cart/cartSlice';
+import { minusCarts, plusCarts, removeCarts } from 'features/Cart/cartSlice';
+import { closeCart } from 'features/Cart/isShowCartSlice';
 import { minusTotalPrice, plusTotalPrice } from 'features/Cart/totalPriceSlice';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+
 const ItemCart = (props) => {
-    const { data, handleClickImage } = props;
+    const { data } = props;
     const [countProduct, setcountProduct] = useState(data.countProduct);
     const accessToken = localStorage.getItem('accessToken');
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        setcountProduct(data.countProduct);
+    }, [data.countProduct]);
 
     const handleMinusCount = () => {
         if(accessToken) {
@@ -49,6 +55,11 @@ const ItemCart = (props) => {
             const actionPlusTotal = plusTotalPrice(data.SANPHAM.price * countProduct);
             dispatch(actionPlusTotal);
         }
+    }
+
+    const handleClickImage = () => {
+        const action = closeCart();
+        dispatch(action);
     }
 
     return (

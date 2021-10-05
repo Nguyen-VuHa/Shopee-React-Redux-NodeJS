@@ -153,7 +153,6 @@ const CustomCategory = () => {
             <SimpleBar forceVisible="y" autoHide={false} style={{ maxHeight: '100%' }}>
                 {isHandle === true ? <LoadingSubmit /> : ''}
                 <form className="category-custom">
-                    <div className="ct-header"></div>
                     <div className="ct-content">
                         <div className="group-box ct-content__left">
                             <EditCateControl stateListChecked={stateListChecked} handleOpenModal={handleOpenModal}/>
