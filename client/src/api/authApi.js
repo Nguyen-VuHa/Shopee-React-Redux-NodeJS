@@ -1,7 +1,7 @@
 const { default: axiosClient } = require("./clientAxios");
 
 const authApi = {
-    post: (data) => {
+    createAccount: (data) => {
         const url = `/auth/register`;
         return axiosClient.post(url, JSON.stringify(data));
     },

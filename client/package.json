@@ -17,6 +17,7 @@
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-html-parser": "^2.0.2",
+    "react-icons": "^4.3.1",
     "react-image-magnifiers": "^1.4.0",
     "react-moment": "^1.1.1",
     "react-redux": "^7.2.4",
@@ -26,8 +27,9 @@
     "react-spinners": "^0.11.0",
     "react-toastify": "^7.0.4",
     "reactstrap": "^8.9.0",
-    "simplebar-react": "^2.3.5",
+    "simplebar": "^5.3.6",
     "swiper": "^6.8.0",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.1.2",
     "yup": "^0.32.9"
   },

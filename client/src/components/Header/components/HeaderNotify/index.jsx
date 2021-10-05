@@ -7,7 +7,6 @@ import 'moment/locale/vi';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import SimpleBar from 'simplebar-react';
 
 const Notify = (props) => {
     const [count, setCount] = useState(0);
@@ -80,7 +79,7 @@ const Notify = (props) => {
                     <h3>Thông báo</h3>
                 </div> 
                 <div className="line"></div>
-                <SimpleBar forceVisible="y" autoHide={true} style={{maxHeight: 600}}>
+                <div data-simplebar style={{width: '100%', maxHeight: '600px'}}>
                     <ul className="body-content" id="body-content">
                         { props.listNotify ? props.listNotify.map(function(data, index) {
                             moment.locale('vi');
@@ -96,7 +95,7 @@ const Notify = (props) => {
                                     </li>
                         }) : <li>is Loading ...</li>}
                     </ul>
-                </SimpleBar>
+                </div>
             </div>
         </div>
     );

@@ -3,6 +3,7 @@ import Footer from 'components/Footer';
 import Header from 'components/Header';
 import LoadingPage from 'components/LoadingPage';
 import PageNotFound from 'components/PageNotFound';
+import ToastMessage from 'components/ToastMessage';
 import Auth from 'features/Auth';
 import Cart from 'features/Cart';
 import ProductStore from 'features/Product';
@@ -11,7 +12,6 @@ import ProductDetail from 'features/ProductDetail';
 import $ from 'jquery';
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import './App.scss';
 import './responsive.scss';
 
@@ -74,42 +74,40 @@ function App() {
 	}, [isLogin]);
 
 	return (
-		<div className="shopee-app">
-			<ToastContainer />
-			<Suspense fallback={<LoadingPage />} >
-				<BrowserRouter>
-					<Switch>
+		<Suspense fallback={<LoadingPage />} >
+			<ToastMessage autoDeleteInterval={3500}/>
+			<BrowserRouter>
+				<Switch>
 
-						<Route exact path="/">
-							<Header status={isLogin} handleisLogout={handleisLogout} />
-							<Cart />
-							<HomePage />
-							<Footer />
-						</Route>
+					<Route exact path="/">
+						<Header status={isLogin} handleisLogout={handleisLogout} />
+						<Cart />
+						<HomePage />
+						<Footer />
+					</Route>
 
-						<Route exact path="/shop-all">
-							<Header status={isLogin} handleisLogout={handleisLogout} />
-							<Cart />
-							<ProductStore />
-							<Footer />
-						</Route>
+					<Route exact path="/shop-all">
+						<Header status={isLogin} handleisLogout={handleisLogout} />
+						<Cart />
+						<ProductStore />
+						<Footer />
+					</Route>
 
-						<Route path="/product-page">
-							<Header status={isLogin} handleisLogout={handleisLogout} />
-							<Cart />
-							<ProductDetail />
-							<Footer />
-						</Route>
-						
-						<Route path="/auth">
-							<Auth isLogin={isLogin} handleisLogin={handleisLogin}/>
-						</Route>
-						
-						<Route component={PageNotFound}/>
-					</Switch>
-				</BrowserRouter>
-			</Suspense>
-		</div>
+					<Route path="/product-page">
+						<Header status={isLogin} handleisLogout={handleisLogout} />
+						<Cart />
+						<ProductDetail />
+						<Footer />
+					</Route>
+					
+					<Route path="/auth">
+						<Auth isLogin={isLogin} handleisLogin={handleisLogin}/>
+					</Route>
+					
+					<Route component={PageNotFound}/>
+				</Switch>
+			</BrowserRouter>
+		</Suspense>
 	);
 }
 

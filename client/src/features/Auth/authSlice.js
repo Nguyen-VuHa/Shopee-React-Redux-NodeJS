@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import authApi from "api/authApi";
 
 export const getRegister = createAsyncThunk('register/getRegister', async (thunkApi) => {
-    const messageRegister = await authApi.post(thunkApi);
+    const messageRegister = await authApi.createAccount(thunkApi);
     return messageRegister;
 })
 

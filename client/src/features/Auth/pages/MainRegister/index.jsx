@@ -1,20 +1,23 @@
 import { unwrapResult } from '@reduxjs/toolkit';
-import ToastMessage from 'components/ToastMessage/toastmessage';
+import ToastMessage from 'components/ToastMessage';
+import { ToastContext } from 'context/toastContext';
 import { getRegister } from 'features/Auth/authSlice';
 import RegisterForm from 'features/Auth/components/RegisterForm';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 
 const MainRegister = () => {
-    const dispath = useDispatch();
+    const {state, dispatch} = useContext(ToastContext);
+    const disPath = useDispatch();
     const history = useHistory();
     
     const handleOnSubmit = async (values) => {
         try {
-            const actionResult = await dispath(getRegister(values));
+            const actionResult = await disPath(getRegister(values));
             const messageResult = unwrapResult(actionResult);
             if(messageResult === 'success')
             {   
@@ -22,7 +25,16 @@ const MainRegister = () => {
                 history.push('/auth/login');
             }
             else {
-                toast.warn(<ToastMessage title='Warning!' message={messageResult} type='warning'/>);
+                dispatch({
+                    type: 'ADD_NOTIFICATION',
+                    payload: {
+                        id: uuidv4(),
+                        type: "WARNING",
+                        title: "Warning!",
+                        message: messageResult,
+                        position: "top-right",
+                    }
+                })
             }
         }
         catch(err)

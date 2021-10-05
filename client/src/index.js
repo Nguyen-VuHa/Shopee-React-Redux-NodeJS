@@ -12,11 +12,14 @@ import 'swiper/swiper.scss';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import { ToastContextProvider } from 'context/toastContext';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+        <ToastContextProvider>
+          <App />
+        </ToastContextProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

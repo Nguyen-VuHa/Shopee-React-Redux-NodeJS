@@ -8,6 +8,8 @@ const HomePage = () => {
         window.scrollTo(0, 0);
     }, []);
 
+    
+
     return (
         <>
             <Helmet>
@@ -17,7 +19,6 @@ const HomePage = () => {
                 <MainHomePage />
             </div>
         </>
-     
     );
 };
 
