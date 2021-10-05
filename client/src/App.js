@@ -3,7 +3,6 @@ import Footer from 'components/Footer';
 import Header from 'components/Header';
 import LoadingPage from 'components/LoadingPage';
 import PageNotFound from 'components/PageNotFound';
-import Admin from 'features/Admin';
 import Auth from 'features/Auth';
 import Cart from 'features/Cart';
 import ProductStore from 'features/Product';
@@ -105,10 +104,7 @@ function App() {
 						<Route path="/auth">
 							<Auth isLogin={isLogin} handleisLogin={handleisLogin}/>
 						</Route>
-
-						<Route path="/admin">
-							<Admin />
-						</Route>
+						
 						<Route component={PageNotFound}/>
 					</Switch>
 				</BrowserRouter>

@@ -90,7 +90,7 @@ const Header = (props) => {
                     </div>
                     <div className="grid-item item-user">
                         <div className="menu-btn">
-                            <i class="fal fa-bars"></i>
+                            <i className="fal fa-bars"></i>
                         </div>
                         <div className="masthead">
                             {status ? <> 
@@ -154,7 +154,7 @@ const Header = (props) => {
             <div className="header__bottom">
                 <div className="container">
                     <div className="close-tab">
-                        <i class="fal fa-times-circle"></i>
+                        <i className="fal fa-times-circle"></i>
                     </div>
                     <ul className="list-btn">
                         <li className="item">
