@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Switch } from 'react-router-dom';
+import ModalSlideShow from './components/ModalSlideShow';
 import MainDetailProduct from './pages/MainProductDetail';
 import './product-detail.scss';
 import { getListProduct } from './productDetail';
@@ -12,11 +13,11 @@ const ProductDetail = () => {
     useEffect(() => {
        const action = getListProduct();
        dispatch(action);
-       
     }, [dispatch]);
 
     return (
         <>
+            <ModalSlideShow />
             <div className="container ip-content">
                 <Switch>
                    <MainDetailProduct />

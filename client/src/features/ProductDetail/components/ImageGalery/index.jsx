@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setIndexImage, setOpenModal } from '../ModalSlideShow/modalShowSlice';
 
 
-const ImageGalery = ({ src }) => {
-
+const ImageGalery = ({ src, idImage, dataImage }) => {
+    const dispatch = useDispatch();
+    
     useEffect(() => {
         var lightbox_area = document.getElementById('lightbox_area');
         var galery_image = document.getElementById('galery_image');
@@ -26,14 +29,20 @@ const ImageGalery = ({ src }) => {
         })
     }, []);
 
+    const handleClickLightBox = () => {
+        dispatch(setIndexImage(dataImage.slice(0).reverse().findIndex(item => item.id === idImage)))
+        dispatch(setOpenModal());
+    }
+
     return (
         <div 
             id="lightbox_area" className="lightbox"
+            onClick={() => handleClickLightBox()}
         >
             <img
                 src={src}
-                alt="NOT IMAGE"
-                className="galery_image"
+                alt="NOT VALUE"
+                className="galery_image w-100"
                 id="galery_image"
             />
         </div>

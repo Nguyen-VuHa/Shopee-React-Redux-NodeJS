@@ -20,9 +20,12 @@ class ProductController {
         const product = await Product.findAll({
             include: {
                 model: ImageProduct,
-                attributes: ['imageUrl', 'Image_idProduct', 'id']
+                attributes: ['imageUrl', 'Image_idProduct', 'id'],
+                order: [
+                    ['createAt', 'DESC'],
+                ]
             },
-            attributes: ['idProduct' , 'nameProduct', 'descProduct', 'price']
+            attributes: ['idProduct' , 'nameProduct', 'descProduct', 'price'],
         });
         res.json(product);
     }

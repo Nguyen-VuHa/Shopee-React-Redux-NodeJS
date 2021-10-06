@@ -6,12 +6,14 @@ import totalPriceCartReducers from 'features/Cart/totalPriceSlice';
 import productViewReducers from 'features/Product/productSlice';
 import productDetailReducers from 'features/ProductDetail/productDetail';
 import homepageReducers from 'features/HomePage/homepageSlice';
+import modalSlideShow from 'features/ProductDetail/components/ModalSlideShow/modalShowSlice';
 
 const rootReducer = {
     registers: registerReducer,
     homepages: homepageReducers,
     productView: productViewReducers,
     listProductDetail: productDetailReducers,
+    modalSlide: modalSlideShow,
 
     listCarts: listCartsReducer,
     carts: cartReducers, 

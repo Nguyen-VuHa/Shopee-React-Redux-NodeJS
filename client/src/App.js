@@ -32,26 +32,26 @@ function App() {
     }, []);
 
 	useEffect(() => {
-		if(resizeWindow < 600) 
-		{
-			$('.header').css('top','0%');
-		}
-		else {
-			var prevScrollpos = window.pageYOffset;
-			$(window).scroll(function() {
-				var currentScrollPos = window.pageYOffset;
-				if (prevScrollpos > currentScrollPos) {
-					$('.header').css('top','0%');
-				} else {
-					$('.header').css('top','-100%');
-				}
-				prevScrollpos = currentScrollPos;
-				if(window.pageYOffset === 0)
-				{
-					$('.header').css('top','0%');
-				}
-			})
-		}
+		// if(resizeWindow < 600) 
+		// {
+		// 	$('.header').css('top','0%');
+		// }
+		// else {
+		// 	var prevScrollpos = window.pageYOffset;
+		// 	$(window).scroll(function() {
+		// 		var currentScrollPos = window.pageYOffset;
+		// 		if (prevScrollpos > currentScrollPos) {
+		// 			$('.header').css('top','0%');
+		// 		} else {
+		// 			$('.header').css('top','-100%');
+		// 		}
+		// 		prevScrollpos = currentScrollPos;
+		// 		if(window.pageYOffset === 0)
+		// 		{
+		// 			$('.header').css('top','0%');
+		// 		}
+		// 	})
+		// }
 	});
 
 	const handleisLogin = (values) => {

@@ -4,8 +4,8 @@ import { productImgDetailSelectors } from 'features/ProductDetail/productDetail'
 import $ from 'jquery';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { UncontrolledCollapse } from 'reactstrap';
 import ImageGaleryView from '../ImageGaleryView';
+import { setAllImage } from '../ModalSlideShow/modalShowSlice';
 
 const ContentDetail = (props) => {
     const { data } = props;
@@ -15,6 +15,11 @@ const ContentDetail = (props) => {
    
     const stateImage = useSelector(productImgDetailSelectors.selectAll);
     
+    useEffect(() => {
+        dispatch(setAllImage(stateImage.filter(id => id.Image_idProduct === data.idProduct)));
+    }, [dispatch , data, stateImage]);
+
+
     useEffect(() => {
         $('.btn-desc').on('click', function() {
             if($(this).find('.fa-plus').length > 0) {
@@ -60,7 +65,7 @@ const ContentDetail = (props) => {
         <>
             <div className="product-detail">
                 <div className="pdt-item">
-                <ImageGaleryView dataImage={stateImage.filter(id => id.Image_idProduct === data.idProduct)}/>
+                    <ImageGaleryView dataImage={stateImage.filter(id => id.Image_idProduct === data.idProduct)}/>
                 </div>
                 <div className="pdt-item pdt-item__left">
                     <div className="name-product">

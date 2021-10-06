@@ -24,7 +24,6 @@ const Header = (props) => {
             else {
                 $('.info-user').toggleClass('active');
             }
-            
        })
 
        $(window).on('click', function(e) {
