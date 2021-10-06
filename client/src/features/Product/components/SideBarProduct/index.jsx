@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
-import { Card, CardBody, UncontrolledCollapse } from 'reactstrap';
+import { listNameSelectors } from 'features/Product/productSlice';
 import $ from 'jquery';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { UncontrolledCollapse } from 'reactstrap';
 
 const SideBarProduct = (props) => {
-    const { listCategory, handleFilterCategory} = props;
+    const { handleFilterCategory } = props;
+    const listName = useSelector(listNameSelectors.selectAll);
 
     useEffect(() => {
         $('.filter-category').on('click', function() {
@@ -44,27 +47,12 @@ const SideBarProduct = (props) => {
                         <li className="child-item active" onClick={(e) => handleClickAll(e)}>
                             Tất Cả
                         </li>
-                        {listCategory.map(function(data, index) {
-                                return <li className="child-item" key={index} onClick={(e) => handleClickItem(data.idCategory , e)}>
-                                    {data.nameCategory}
-                                </li>
+                        {listName.map(function(data) {
+                            return <li className="child-item" key={data.idCategory} onClick={(e) => handleClickItem(data.idCategory , e)}>
+                                {data.nameCategory}
+                            </li>
                         })}
                     </ul>
-                </UncontrolledCollapse>
-                </li>
-                <li className="filter-item">
-                <button className="btn filter-category" id="price">
-                    <div className="name">Giá bán</div>
-                    <div className="icon">
-                        <i className="fal fa-plus"></i>
-                    </div>
-                </button>
-                <UncontrolledCollapse toggler="#price" className="tab-price">
-                    <Card>
-                        <CardBody>
-                           Giá Bán
-                        </CardBody>
-                    </Card>
                 </UncontrolledCollapse>
                 </li>
             </ul>

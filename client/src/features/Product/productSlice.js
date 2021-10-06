@@ -1,60 +1,65 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import categoryApi from "api/categoryApi";
 import productApi from 'api/productApi';
 
-var initialState = {
-        products: [],
-        categories: [],
-        statusMesage: '',
+
+export const getProductView = createAsyncThunk('GET_ALL_PRODUCT', async () => {
+    const stateReponse = await productApi.getProductView();
+    return stateReponse;
+})
+
+export const getNameCategory = createAsyncThunk('GET_LIST_NAME_CATEGORY', async () => {
+    const stateReponse = await categoryApi.getNameCategory();
+    return stateReponse;
+})
+
+export const getCategoryById = createAsyncThunk('FILTER_FOR_CATEGORY', async (idCategory) => {
+    const stateReponse = await categoryApi.getCategoryById(idCategory);
+    return stateReponse;
+})
+
+const productViewAdapter = createEntityAdapter({
+    selectId: (product) => product.idProduct,
+});
+
+const listNameCategoryAdapter = createEntityAdapter({
+    selectId: (categories) => categories.idCategory,
+});
+
+const productViewSlice = createSlice({
+    name: 'product',
+    initialState: productViewAdapter.getInitialState({
         loading: false,
         error: '',
-    }
-
-export const getAllProduct = createAsyncThunk('GET_ALL_PRODUCT', async () => {
-    const stateReponse = await productApi.getAllProduct();
-    return stateReponse;
-})
-
-export const getAllCategory = createAsyncThunk('GET_ALL_CATEGORY', async () => {
-    const stateReponse = await categoryApi.getAllCategory();
-    return stateReponse;
-})
-
-export const getCategoryById = createAsyncThunk('FILTER_FOR_CATEGORY', async (thunkApi) => {
-    const stateReponse = await categoryApi.getCategoryById(thunkApi);
-    return stateReponse;
-})
-
-const productSlice = createSlice({
-    name: 'product',
-    initialState: initialState,
+        listname: listNameCategoryAdapter.getInitialState(),
+    }),
     reducers: {},
     extraReducers: {
-        // GET ALL PRODUCTS
-        [getAllProduct.pending]: (state) => {
+        // GET ALL PRODUCTS VIEW
+        [getProductView.pending]: (state) => {
             state.loading = true;
         },
-        [getAllProduct.rejected]: (state, action) => {
+        [getProductView.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        [getAllProduct.fulfilled]: (state, action) => {
+        [getProductView.fulfilled]: (state, action) => {
             state.loading = false;
-            state.products = action.payload;
-            state.statusMesage = 'OKE';
+            state.error = '';
+            productViewAdapter.setAll(state, action.payload);
         },
-        // GET ALL CATEGORY
-        [getAllCategory.pending]: (state) => {
+        // GET LIST NAME CATEGORY
+        [getNameCategory.pending]: (state) => {
             state.loading = true;
         },
-        [getAllCategory.rejected]: (state, action) => {
+        [getNameCategory.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        [getAllCategory.fulfilled]: (state, action) => {
+        [getNameCategory.fulfilled]: (state, action) => {
             state.loading = false;
-            state.categories = action.payload.objData;
-            state.statusMesage = 'OKE';
+            state.error = '';
+            listNameCategoryAdapter.setAll(state.listname, action.payload);
         },
         // FILTER FOR CATEGORY
         [getCategoryById.pending]: (state) => {
@@ -65,13 +70,16 @@ const productSlice = createSlice({
             state.error = action.payload;
         },
         [getCategoryById.fulfilled]: (state, action) => {
-            console.log(action);
             state.loading = false;
-            state.products = action.payload;
-            state.statusMesage = 'OKE';
+            state.error = '';
+            productViewAdapter.removeAll(state, {});
+            productViewAdapter.setAll(state, action.payload);
         },
     }
 })
 
-const  { reducer } = productSlice;
+export const productViewSelectors = productViewAdapter.getSelectors((state) => state.productView);
+export const listNameSelectors = productViewAdapter.getSelectors((state) => state.productView.listname);
+
+const  { reducer } = productViewSlice;
 export default reducer;

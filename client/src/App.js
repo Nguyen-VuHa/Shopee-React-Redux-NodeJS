@@ -68,8 +68,11 @@ function App() {
 			let intervalId = setInterval(() => fecthRefreshToken() , 30000);
 			setIntervals(intervalId);
 		}
-		else {
+		else
 			clearInterval(intervals);
+
+		return (intervals) => {
+			clearInterval(intervals)
 		}
 	}, [isLogin]);
 
@@ -78,7 +81,7 @@ function App() {
 			<ToastMessage autoDeleteInterval={3500}/>
 			<BrowserRouter>
 				<Switch>
-
+					
 					<Route exact path="/">
 						<Header status={isLogin} handleisLogout={handleisLogout} />
 						<Cart />

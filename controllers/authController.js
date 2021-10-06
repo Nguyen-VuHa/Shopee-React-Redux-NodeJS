@@ -62,7 +62,10 @@ class AuthController {
             found.refreshToken = refreshToken;
             await found.save();
 
-            res.json({status: 'success', accessToken: accessToken, refreshToken: refreshToken, infoUser: user});
+            res.json({status: 'success', accessToken: accessToken, refreshToken: refreshToken, infoUser: {
+                email: found.email,
+                fullname: found.fullname,
+            }});
         }
         else {
             res.json({status: 'Email and Password is not found!'});

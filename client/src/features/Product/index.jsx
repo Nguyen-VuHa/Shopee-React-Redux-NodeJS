@@ -3,17 +3,17 @@ import { Helmet } from 'react-helmet';
 import { useDispatch } from 'react-redux';
 import MainProduct from './pages/MainProduct';
 import './product-store.scss';
-import { getAllProduct, getAllCategory } from './productSlice';
+import { getNameCategory, getProductView } from './productSlice';
 
 const ProductStore = () => {
-    const dispath = useDispatch();
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        const action_Product = getAllProduct();
-        dispath(action_Product);
-        const action_Cate = getAllCategory();
-        dispath(action_Cate);
-    }, [dispath]);
+        const actionProductView = getProductView();
+        dispatch(actionProductView);
+        const actionListName = getNameCategory();
+        dispatch(actionListName);
+    }, [dispatch]);
 
     return (
         <>

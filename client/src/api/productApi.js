@@ -5,13 +5,9 @@ const productApi = {
         const url =`/api/product`;
         return axiosClient.get(url);
     },
-    postProduct: (data) => {
-        const url = `/api/product/new-product`;
-        return axiosClient.post(url, JSON.stringify(data));
-    },
-    updateProduct: (data) => {
-        const url =`/api/product/update/${data.idProduct}`;
-        return axiosClient.post(url, JSON.stringify(data));
+    getProductView: () => {
+        const url =`/api/product-view`;
+        return axiosClient.get(url);
     },
     searchProduct: (params) => {
         const url=`/api/search-product?query_search=${params}`;
@@ -21,6 +17,10 @@ const productApi = {
         const url=`/api/list-product`;
         return axiosClient.get(url);
     },
+    getProductDetail: () => {
+        const url=`/api/product-detail`;
+        return axiosClient.get(url);
+    }
 }
 
 export default productApi;

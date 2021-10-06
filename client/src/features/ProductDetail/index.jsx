@@ -3,15 +3,16 @@ import { useDispatch } from 'react-redux';
 import { Switch } from 'react-router-dom';
 import MainDetailProduct from './pages/MainProductDetail';
 import './product-detail.scss';
-import { getAllProduct } from './productDetail';
+import { getListProduct } from './productDetail';
 
 
 const ProductDetail = () => {
     const dispatch = useDispatch();
     
     useEffect(() => {
-       const action = getAllProduct();
+       const action = getListProduct();
        dispatch(action);
+       
     }, [dispatch]);
 
     return (

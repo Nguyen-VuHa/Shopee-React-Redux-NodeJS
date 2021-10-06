@@ -6,6 +6,8 @@ const categoryController = require('../controllers/categoryController');
 
 
 router.get('/category' , categoryController.getAllCategory);
+router.get('/category/slide' , categoryController.getSliderHomePage);
+router.get('/category/list-name' , categoryController.getNameCategory);
 router.get('/category/shop-all' , categoryController.getCategoryShopAll);
 router.get('/category/:idCategory' , categoryController.getCategoryById);
 router.get('/category-product/:idCategory' , categoryController.getCategoryProduct);

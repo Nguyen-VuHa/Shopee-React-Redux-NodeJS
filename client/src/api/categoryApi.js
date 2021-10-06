@@ -1,26 +1,18 @@
 const { default: axiosClient } = require("./clientAxios");
 
 const categoryApi = {
-    getAllCategory: () => {
-        const url =  `/api/category`;
+    getSlideHomePage: () => {
+        const url =  `/api/category/slide`;
+        return axiosClient.get(url);
+    },
+    getNameCategory: () => {
+        const url =  `/api/category/list-name`;
         return axiosClient.get(url);
     },
     getCategoryById: (idCategory) => {
-        const url =  `/api/category-product/${idCategory}`;
+        const url =  `/api/category/${idCategory}`;
         return axiosClient.get(url);
-    },
-    createCategory: (data) => {
-        const url =  `/api/category/new-category`;
-        return axiosClient.post(url, JSON.stringify(data));
-    },
-    updateCategory: (data) => {
-        const url =  `/api/category/update-category`;
-        return axiosClient.post(url, JSON.stringify(data));
-    },
-    deleteCategory: (idCategory) => {
-        const url =  `/api/category/delete/${idCategory}`;
-        return axiosClient.post(url);
-    },
+    }
 }
 
 export default categoryApi;

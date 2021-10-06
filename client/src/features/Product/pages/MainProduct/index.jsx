@@ -1,13 +1,12 @@
 import SideBarProduct from 'features/Product/components/SideBarProduct';
 import WrapperProduct from 'features/Product/components/WrapperProduct';
-import { getAllProduct, getCategoryById } from 'features/Product/productSlice';
+import { getCategoryById, getProductView } from 'features/Product/productSlice';
 import $ from 'jquery';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Container } from 'reactstrap';
 
 const MainProduct = () => {
-    const state = useSelector((state) => state.products);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,7 +17,7 @@ const MainProduct = () => {
     const handleFilterCategory = async (values) => {
         if(values === 'all')
         {
-            const action = getAllProduct();
+            const action = getProductView();
             dispatch(action);
         }
         else {
@@ -44,8 +43,8 @@ const MainProduct = () => {
                     </div>
                 </div>
                 <div className="pd-store-content">
-                    <SideBarProduct listCategory={state?.categories} handleFilterCategory={handleFilterCategory}/>
-                    <WrapperProduct listProduct={state?.products} isLoading={state?.loading}/>
+                    <SideBarProduct handleFilterCategory={handleFilterCategory}/>
+                    <WrapperProduct />
                 </div>
             </Container>
         </div>

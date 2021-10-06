@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 
 const MainRegister = () => {
-    const {state, dispatch} = useContext(ToastContext);
+    const {dispatch} = useContext(ToastContext);
     const disPath = useDispatch();
     const history = useHistory();
     

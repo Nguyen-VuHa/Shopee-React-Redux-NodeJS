@@ -2,15 +2,60 @@ const { Category, CateProduct } = require('../models/bosuutap');
 const Product = require('../models/sanpham');
 const ImageProduct = require('../models/hinhanh_sanpham');
 const { cloudinary } = require('../untils/cloudinary');
+const db = require('../models/database');
+const { QueryTypes } = require('sequelize');
 
 class ProductController { 
 
     // [GET] /product
     async getAllProduct(req, res) {
         const product = await Product.findAll({
-            include: [ImageProduct]
+            include: [ImageProduct],
         });
         res.json(product);
+    }
+
+     // [GET] /product-detail
+     async getProductDetail(req, res) {
+        const product = await Product.findAll({
+            include: {
+                model: ImageProduct,
+                attributes: ['imageUrl', 'Image_idProduct', 'id']
+            },
+            attributes: ['idProduct' , 'nameProduct', 'descProduct', 'price']
+        });
+        res.json(product);
+    }
+
+    // [GET] /product/view
+    async getAllProductView (req, res) {
+        const productView = await db.query(`
+            SELECT "sp"."idProduct","sp"."nameProduct","sp"."price","sp"."status" FROM "SANPHAMs" AS "sp"
+        `, { type: QueryTypes.SELECT} );
+
+        const objImage = [];
+        for(var index in productView)
+        {
+            var imageUrl = await ImageProduct.findAll({
+                where: {
+                    Image_idProduct: productView[index].idProduct,
+                }
+            });
+
+            objImage.push({
+                idProduct: imageUrl[0].Image_idProduct,
+                imageUrl: imageUrl[0].imageUrl 
+            });
+        }
+
+        var result = [];
+        objImage.map((item, index) => {
+            if(productView.filter(p => p.idProduct === item.Image_idProduct)) {
+                result.push(Object.assign(productView[index], item));
+            }
+        });
+        
+        res.json(result);
     }
 
     // [POST] /product/new-product

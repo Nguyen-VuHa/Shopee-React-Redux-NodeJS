@@ -1,6 +1,9 @@
 const { Category, CateProduct } =  require('../models/bosuutap');
 const Product = require('../models/sanpham');
+const ImageProduct = require('../models/hinhanh_sanpham');
 const { cloudinary } = require('../untils/cloudinary');
+const { QueryTypes } = require('sequelize');
+const db = require('../models/database');
 
 class categoryController { 
     // [POST] /category/new-category
@@ -74,6 +77,47 @@ class categoryController {
         res.json(objData);
     }
 
+     // [GET] /category/slide
+    async getSliderHomePage(req, res) {
+        const data = await db.query(
+            `SELECT DISTINCT "sp"."idProduct", "sp"."nameProduct", "sp"."price"
+            FROM "BOSUUTAPs" AS "bst" JOIN "SANPHAM_BOSUUTAPs" AS "sp_bst" ON "bst"."idCategory" = "sp_bst"."BOSUUTAPIdCategory"
+            JOIN "SANPHAMs" AS "sp" ON "sp_bst"."SANPHAMIdProduct" = "sp"."idProduct" 
+            WHERE "bst"."nameCategory" = 'Best Sallers'
+            `
+        , { type: QueryTypes.SELECT });
+
+        const objImage = [];
+
+        for(var item in data) {
+            var imgProduct = await Product.findByPk( data[item].idProduct , {
+                include: [ImageProduct],
+            });
+            objImage.push({
+                idProduct: imgProduct.HINHANH_SANPHAMs[0].Image_idProduct,
+                imageUrl:  imgProduct.HINHANH_SANPHAMs[0].imageUrl,
+            });
+        }
+
+        var result = [];
+        objImage.map((item, index) => {
+            if(data.filter(p => p.idProduct === item.Image_idProduct)) {
+                result.push(Object.assign(data[index], item));
+            }
+        })
+
+        res.json(result);
+    }
+
+    // [GET] /category/name
+    async getNameCategory(req, res) {
+        const data = await Category.findAll({
+            attributes: ['idCategory', 'nameCategory'], 
+        });
+ 
+        res.json(data);
+    }
+
     // [GET] /category/shop-all
     async getCategoryShopAll (req, res) {
         const data = await Category.findAll();
@@ -115,16 +159,36 @@ class categoryController {
      async getCategoryById(req, res) {
         const { idCategory } = req.params;
         try {
-            const data = await Category.findOne({
-                where: {
-                    idCategory: idCategory,
-                },
-                include: {
-                    model: Product,
+            const productView = await db.query(`
+                SELECT "sp"."idProduct","sp"."nameProduct","sp"."price","sp"."status" FROM "BOSUUTAPs" AS "bst"
+                JOIN "SANPHAM_BOSUUTAPs" AS "sp_bst" ON "bst"."idCategory" = "sp_bst"."BOSUUTAPIdCategory"
+                JOIN "SANPHAMs" AS "sp" ON "sp_bst"."SANPHAMIdProduct" = "sp"."idProduct"
+                WHERE "bst"."idCategory" = '${idCategory}'
+            `, { type: QueryTypes.SELECT} );
+
+            const objImage = [];
+            for(var index in productView)
+            {
+                var imageUrl = await ImageProduct.findAll({
+                    where: {
+                        Image_idProduct: productView[index].idProduct,
+                    }
+                });
+    
+                objImage.push({
+                    idProduct: imageUrl[0].Image_idProduct,
+                    imageUrl: imageUrl[0].imageUrl 
+                });
+            }
+
+            var result = [];
+            objImage.map((item, index) => {
+                if(productView.filter(p => p.idProduct === item.Image_idProduct)) {
+                    result.push(Object.assign(productView[index], item));
                 }
             });
            
-            res.json(data)
+            res.json(result)
         }
         catch(err) {
             res.json({error: err})

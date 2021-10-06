@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const MainLogin = (props) => {
     const disPath = useDispatch();
-    const {state, dispatch} = useContext(ToastContext);
+    const {dispatch} = useContext(ToastContext);
     const handleOnSubmit = async (values) => {
         try {
             const actionResult = await disPath(getLogin(values));

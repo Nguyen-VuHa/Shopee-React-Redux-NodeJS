@@ -1,13 +1,14 @@
 import ContentDetail from 'features/ProductDetail/components/Content';
 import HeaderDetail from 'features/ProductDetail/components/Header';
+import { productDetailSelectors } from 'features/ProductDetail/productDetail';
 import $ from 'jquery';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Route, useRouteMatch } from 'react-router';
 
 const MainDetailProduct = () => {
-    const state = useSelector((state) => state.productsDetail);
-    const match = useRouteMatch();  
+    const productDetail = useSelector(productDetailSelectors.selectAll);
+    const match = useRouteMatch();      
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -17,16 +18,16 @@ const MainDetailProduct = () => {
     return (
         <div>
             {
-                state?.products.length > 0 ?  
-                    state?.products.map(function(data, index) {
+               productDetail.length > 0 ?  
+               productDetail.map(function(data, index) {
                         return  <Route exact path={`${match.path}/${data.nameProduct.replaceAll(' ', '-')}`} key={index}>
                                     <HeaderDetail 
                                         indexList={index} 
-                                        totalIndex={state?.products.length} 
+                                        totalIndex={productDetail.length} 
                                         listProduct={data} 
-                                        allProduct={state?.products}/>
+                                        allProduct={productDetail}/>
                                     <ContentDetail 
-                                        listProduct={data} 
+                                        data={data} 
                                     />
                                 </Route>
                     })        

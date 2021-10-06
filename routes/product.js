@@ -5,6 +5,8 @@ const router  = express.Router();
 const productController = require('../controllers/productController');
 
 router.get('/product' , productController.getAllProduct);
+router.get('/product-view' , productController.getAllProductView);
+router.get('/product-detail' , productController.getProductDetail);
 router.get('/search-product', productController.getProductByQuery);
 router.get('/product/:idProduct' , productController.getProductById);
 

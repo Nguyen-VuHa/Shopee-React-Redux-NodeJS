@@ -1,37 +1,61 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import productApi from "api/productApi";
 
-var initialState = {
-    products: [],
-    statusMesage: '',
-    loading: false,
-    error: '',
-}
-export const getAllProduct = createAsyncThunk('GET_ALL_PRODUCT_DETAIL', async () => {
-    const message = await productApi.getListProduct();
-    return message;
+export const getListProduct = createAsyncThunk('GET_ALL_PRODUCT_DETAIL', async () => {
+    const message = await productApi.getProductDetail();
+    var arrayImage = [];
+    var arrayData = [];
+    message.forEach(item => {
+
+        item.HINHANH_SANPHAMs.forEach(i => {
+            arrayImage.push(i);
+        });
+
+        arrayData.push({
+            idProduct: item.idProduct,
+            nameProduct: item.nameProduct,
+            descProduct: item.descProduct,
+            price:  item.price,
+        });
+    });
+    
+    return {arrayImage, arrayData};
 })
 
-const productDetailApis = createSlice({
+const productDetailAdapter = createEntityAdapter({
+    selectId: (product) => product.idProduct,
+});
+
+const productImgDetailAdapter = createEntityAdapter({
+    selectId: (product) => product.id,
+});
+
+const productDetailSlice = createSlice({
     name: 'productDetail',
-    initialState: initialState,
+    initialState: productDetailAdapter.getInitialState({
+        loading: false,
+        error: '',
+        listImage: productImgDetailAdapter.getInitialState(),
+    }),
     reducers: {},
     extraReducers: {
-        [getAllProduct.pending]: (state) => {
+        [getListProduct.pending]: (state) => {
             state.loading = true;
         },
-        [getAllProduct.rejected]: (state, action) => {
+        [getListProduct.rejected]: (state, action) => {
             state.loading = false;
             state.error = action.payload;
         },
-        [getAllProduct.fulfilled]: (state, action) => {
+        [getListProduct.fulfilled]: (state, { payload }) => {
             state.loading = false;
-            state.products = action.payload;
-            state.statusMesage = 'OK';
+            state.error = 'OK';
+            productDetailAdapter.setAll(state, payload.arrayData);
+            productImgDetailAdapter.setAll(state.listImage, payload.arrayImage)
         },
     }
 })
+export const productDetailSelectors = productDetailAdapter.getSelectors((state) => state.listProductDetail);
+export const productImgDetailSelectors = productImgDetailAdapter.getSelectors((state) => state.listProductDetail.listImage);
 
-
-const  { reducer } = productDetailApis;
+const { reducer } = productDetailSlice;
 export default reducer;

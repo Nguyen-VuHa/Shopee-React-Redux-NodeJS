@@ -22,7 +22,7 @@ const HeaderDetail = (props) => {
                 </div>
                 <div className="control">
                     <Link className={props.indexList === 0 ? "btn-prev enable" : "btn-prev"} to={`/product-page/${props.allProduct[props.indexList - 1] && props.allProduct[props.indexList - 1].nameProduct.replaceAll(' ', '-')}`}>
-                        <i className="fal fa-chevron-left"></i>
+                        <i className="fal fa-chevron-left pl-3"></i>
                         Trước
                     </Link>
                     <Link className={props.indexList === (props.totalIndex - 1) ? "btn-next enable" : "btn-next"} to={`/product-page/${props.allProduct[props.indexList + 1] && props.allProduct[props.indexList + 1].nameProduct.replaceAll(' ', '-')}`}>
