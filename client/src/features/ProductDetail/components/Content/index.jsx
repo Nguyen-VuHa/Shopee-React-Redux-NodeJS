@@ -1,5 +1,3 @@
-import { addItemCart, addItemInCarts } from 'features/Cart/cartSlice';
-import { openCart } from 'features/Cart/isShowCartSlice';
 import { productImgDetailSelectors } from 'features/ProductDetail/productDetail';
 import $ from 'jquery';
 import React, { useEffect, useState } from 'react';
@@ -10,7 +8,6 @@ import { setAllImage } from '../ModalSlideShow/modalShowSlice';
 const ContentDetail = (props) => {
     const { data } = props;
     const [countProduct, setcountProduct] = useState(1);
-    const accessToken = localStorage.getItem('accessToken');
     const dispatch = useDispatch();
    
     const stateImage = useSelector(productImgDetailSelectors.selectAll);
@@ -42,23 +39,7 @@ const ContentDetail = (props) => {
     }
     
     const handleAddToCart = () => {
-        // if(accessToken) {
-        //     const actionAdd = addItemCart(listProduct);
-        //     dispatch(actionAdd);
-
-        //     const action = addItemInCarts({
-        //         accessToken,
-        //         data: {
-        //             idProduct: listProduct.idProduct,
-        //             countProduct: countProduct
-        //         }
-        //     });
-        //     dispatch(action);
-
-        //     const actionShowCart = openCart();
-        //     dispatch(actionShowCart);
-        // }
-        
+    
     }
 
     return (

@@ -1,36 +1,30 @@
 import $ from 'jquery';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Notification from './components/HeaderNotify';
 import './header.scss';
 import Images from 'constants/images';
 import { useDispatch, useSelector } from 'react-redux';
 import { openCart } from 'features/Cart/isShowCartSlice';
+import { setIsLogout } from 'constants/isLoginSlice';
 
-const Header = (props) => {
-    const { status, handleisLogout } = props;
+const Header = () => {
+    const dropdownUserRef = useRef(null);
     const stateCart = useSelector((state) => state.carts);
+    const stateLogin = useSelector((state) => state.isLogin);
     const [listNotify, setlistNotify] = useState([]);
-    let infoUser = JSON.parse(localStorage.getItem('info-user'));
+    const infoUser = JSON.parse(localStorage.getItem('info-user'));
     const dispath = useDispatch();
 
     useEffect(() => {
-       $('.info-user').on('click', function(e) {
-            const ousideClick = e.target.closest('.info-user .user-options');
-            
-            if(ousideClick) {
-                return;
-            }
-            else {
-                $('.info-user').toggleClass('active');
-            }
-       })
-
        $(window).on('click', function(e) {
-           if(!e.target.closest('.info-user .user-options') && !e.target.closest('.info-user'))
-           {
-                $('.info-user').removeClass('active');
-           }
+            if(!e.target.closest('.info-user'))
+            {
+                if(dropdownUserRef.current && !dropdownUserRef.current.contains(e.target) && dropdownUserRef.current.classList.contains('active')) {
+                    dropdownUserRef.current.classList.remove('active');
+                }
+            }
+
            if(!e.target.closest('.content-noti') && !e.target.closest('.notification i'))
            {
                 $('.content-noti').removeClass('active');
@@ -44,7 +38,7 @@ const Header = (props) => {
 
     const handleLogout = () => {
         localStorage.clear();
-        handleisLogout(false);
+        dispath(setIsLogout());
     }
 
     useEffect(() => {
@@ -64,6 +58,12 @@ const Header = (props) => {
     const handleOpenCart = () => {
         const action = openCart();
         dispath(action);
+    }
+
+    const handleOpenUser = (e) => {
+        if (dropdownUserRef.current && !dropdownUserRef.current.contains(e.target)) {
+            dropdownUserRef.current.classList.toggle('active');
+        }
     }
     
     return (
@@ -92,15 +92,15 @@ const Header = (props) => {
                             <i className="fal fa-bars"></i>
                         </div>
                         <div className="masthead">
-                            {status ? <> 
-                                <div className="info-user" >
+                            {stateLogin ? <> 
+                                <div className="info-user" onClick={(e) => handleOpenUser(e)}>
                                     <div className="user-avartar">
-                                        <img src={ infoUser.info.img ? infoUser.info.img : Images.BG_USER } alt="NotImage"/>
+                                        <img src={ Images.BG_USER } alt="NotImage"/>
                                     </div>
-                                    <div className="user-fullname" title={ status ? infoUser.info.fullname : '' }>
-                                        <span>{ status ? infoUser.info.fullname : '' }</span>
+                                    <div className="user-fullname" title={ infoUser.fullname }>
+                                        <span>{ infoUser.fullname }</span>
                                     </div>
-                                    <nav className="user-options">
+                                    <nav className="user-options" ref={dropdownUserRef}>
                                             <ul>
                                                 <li>
                                                     <Link to="#">Đơn hàng</Link>

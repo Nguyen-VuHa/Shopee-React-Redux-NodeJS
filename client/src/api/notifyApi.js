@@ -4,9 +4,9 @@ const notifyApi = {
     getNotify: (accesToken) => {
         const url = `/api/notify`;
 
-        return axiosClient.get(url,{
+        return axiosClient.get(url, {
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Bearer ${accesToken}` 
             } 
         });
     },
@@ -15,7 +15,7 @@ const notifyApi = {
 
         return axiosClient.get(url, {
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Bearer ${accesToken}` 
             } 
         });
     },
@@ -24,7 +24,7 @@ const notifyApi = {
 
         return axiosClient.post(url, {} ,{
             headers: {
-                'Authorization':`Baeber ${accesToken}` 
+                'Authorization':`Bearer ${accesToken}` 
             } 
         });
     },

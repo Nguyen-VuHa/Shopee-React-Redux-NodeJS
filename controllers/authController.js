@@ -46,18 +46,20 @@ class AuthController {
    
     // [POST] /auth/login
     async loginPost (req, res) {
-        const {email , password} = req.body;
+        const { email , password } = req.body;
+     
         const found = await Account.findByEmail(email);
-
+      
         if(found && bcrypt.compareSync(password, found.password)) {
             const user = {
                 id: found.id_user,
                 email: found.email,
                 fullname: found.fullname,
+                role: found.role,
             }
 
-            const accessToken = jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '50s' });
-            const refreshToken = jwt.sign({user}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '40s' });
+            const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y' });
 
             found.refreshToken = refreshToken;
             await found.save();
@@ -65,6 +67,7 @@ class AuthController {
             res.json({status: 'success', accessToken: accessToken, refreshToken: refreshToken, infoUser: {
                 email: found.email,
                 fullname: found.fullname,
+                role: found.role,
             }});
         }
         else {
@@ -81,14 +84,16 @@ class AuthController {
         try {
             jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
+           
             const user = {
                 id: isuser.id_user,
                 email: isuser.email,
                 fullname: isuser.fullname,
+                role: isuser.role,
             }
-
-            const accessToken = jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '50s' });
-            const _refreshToken = jwt.sign({user}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+            
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '40s' });
+            const _refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1y' });
 
             isuser.refreshToken = _refreshToken;
             await isuser.save();

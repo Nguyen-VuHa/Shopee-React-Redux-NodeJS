@@ -43,14 +43,14 @@ const SalesHomePage = () => {
                                         <div className="card-sales card-active">
                                                 <div className="card-out-side">
                                                     <div className="card-img">
-                                                        <img src={data.imageUrl} alt="NotImage"/>
+                                                        <img src={data?.imageUrl} alt="NotImage"/>
                                                     </div>
                                                     <div className="card-armorial">
                                                         Best Seller
                                                     </div>
                                                     <div className="card-info">
                                                         <div className="c__name-product">{data.nameProduct}</div>
-                                                        <span>{data.price.toLocaleString()} đ</span>
+                                                        <span>{data?.price?.toLocaleString()} đ</span>
                                                     </div>
                                                 </div>
                                                 <div className="card-in-side">

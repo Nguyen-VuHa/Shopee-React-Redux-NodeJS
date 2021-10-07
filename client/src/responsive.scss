@@ -7,15 +7,15 @@
     .header__top {
         min-width: auto;
   
-        & .grid-container {
+        .grid-container {
             display: flex;
             justify-content: space-around;
   
-            & .form__search {
+            .form__search {
                 display: none;
             }
   
-            & .grid-item:nth-child(2) {
+            .grid-item:nth-child(2) {
                 padding: 0;
                 & .masthead .user-notification .content-noti{
                     transform-origin: 90% 0%;
@@ -44,10 +44,10 @@
   
     .product-store {
   
-        & .pd-store-content {
+        .pd-store-content {
             grid-template-columns: 1.5fr 3fr;
   
-            & .content-product {
+            .content-product {
                 padding: 0 20px;
                 grid-template-columns: 1fr 1fr;
             }
@@ -67,32 +67,32 @@
     }
 
     .header__top {
-        & .grid-container {
+        .grid-container {
             display: flex;
             flex-direction: column;
   
-            & .form__search {
+            .form__search {
                 display: none;
             }
   
-            & .grid-item  {
+            .grid-item  {
                 width: 100%;
                 display: flex;
                 justify-content: center;
 
-                & .masthead .user-notification .content-noti{
+                .masthead .user-notification .content-noti{
                     transform-origin: 90% 0%;
                     right: -120%;
                 }
             }
 
-            & .item-user {
+            .item-user {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 padding: 10px;
 
-                & .menu-btn {
+                .menu-btn {
                     display: block;
                     padding: 5px 15px;
                     cursor: pointer;
@@ -203,15 +203,15 @@
             }
         }
 
-        & .pdt-item .group-button {
+        .pdt-item .group-button {
             position: fixed;
             bottom: 0;
             left: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-gap: 5px;
+            grid-gap: 0;
 
-            & .btn {
+            .btn {
                 height: 60px;
                 display: flex;
                 justify-content: center;

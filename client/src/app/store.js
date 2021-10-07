@@ -7,6 +7,7 @@ import productViewReducers from 'features/Product/productSlice';
 import productDetailReducers from 'features/ProductDetail/productDetail';
 import homepageReducers from 'features/HomePage/homepageSlice';
 import modalSlideShow from 'features/ProductDetail/components/ModalSlideShow/modalShowSlice';
+import isLoginReducer from 'constants/isLoginSlice';
 
 const rootReducer = {
     registers: registerReducer,
@@ -14,7 +15,8 @@ const rootReducer = {
     productView: productViewReducers,
     listProductDetail: productDetailReducers,
     modalSlide: modalSlideShow,
-
+    isLogin: isLoginReducer,
+    
     listCarts: listCartsReducer,
     carts: cartReducers, 
     totalPriceCart: totalPriceCartReducers,

@@ -158,6 +158,7 @@
 
 @media screen and (max-width: 1024px) { 
     .modal-slide .modal-dialog-bg .modal-content {
+        width: 80%;
         .wrapper-item {
             height: auto
         }
@@ -189,13 +190,21 @@
 
 @media screen and (max-width: 600px) {
     .modal-slide .modal-dialog-bg .modal-content {
-        width: 85%;
-        
+        width: 90%;
+
         .wrapper .slides-container {
-            height: 200px;
+            height: 300px;
+        }
+
+        .wrapper {
 
             .next-btn, .prev-btn {
-                bottom: 0;
+                opacity: 1;
+                padding: 20px 10px;
+
+                i {
+                    font-size: 25px;
+                }
             }
         }
         
@@ -203,7 +212,5 @@
             display: none;
         }
     }
-    
-    
       
 }

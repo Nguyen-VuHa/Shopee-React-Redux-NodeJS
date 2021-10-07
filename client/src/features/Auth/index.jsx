@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
+import PageNotFound from 'components/PageNotFound';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import './auth.scss';
 import MainLogin from './pages/MainLogin';
 import MainRegister from './pages/MainRegister';
-import PropTypes from 'prop-types';
-import PageNotFound from 'components/PageNotFound';
 
-const Auth = (props) => {
+const Auth = () => {
     const match = useRouteMatch();
-    const [isLogin, setisLogin] = useState(false);
-
-    const handleCheckLogin = (values) => {
-        props.handleisLogin(values);
-        setisLogin(values.isLogin);
-    }
+    const isLogin = useSelector((state) => state.isLogin);
 
     return (
         <div className="all-auth">
@@ -27,10 +22,10 @@ const Auth = (props) => {
                     }
 
                     <Route path={`${match.url}/login`} >
-                        { props.isLogin ? <Redirect to='/' /> : <MainLogin handleCheckLogin={handleCheckLogin}/>}
+                        { isLogin ? <Redirect to='/' /> : <MainLogin/>}
                     </Route>
                     <Route path={`${match.url}/sign-up`}>
-                        { props.isLogin ? <Redirect to='/' /> : <MainRegister /> }
+                        { isLogin? <Redirect to='/' /> : <MainRegister /> }
                     </Route>
                     <Route component={PageNotFound}/>
                 </Switch>
@@ -41,12 +36,6 @@ const Auth = (props) => {
 
 
 Auth.propTypes = {
-    isLogin: PropTypes.bool,
-    handleisLogin: PropTypes.func,
 };
-
-Auth.defaultProps = {
-    handleisLogin: null,
-}
 
 export default Auth;

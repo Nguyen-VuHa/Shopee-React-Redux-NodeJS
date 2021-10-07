@@ -1,4 +1,3 @@
-import { fecthRefreshToken } from 'app/refreshToken';
 import { getCount, getNotify, postUpdate } from 'components/Header/headerSlice';
 import Images from 'constants/images';
 import $ from 'jquery';
@@ -33,11 +32,11 @@ const Notify = (props) => {
     }
 
     useEffect(() => {
-        const fecthToken = async () => {
-            await fecthRefreshToken();
-            setIsAccessToken(true)
-        }
-        fecthToken();
+        // const fecthToken = async () => {
+        //     await fecthRefreshToken();
+        //     setIsAccessToken(true)
+        // }
+        // fecthToken();
     }, []);
     
 
@@ -69,7 +68,7 @@ const Notify = (props) => {
         <div className="user-notification">
             <div className="user-noti">
                 <div className="notification">
-                    <i className="fad fa-bell" onClick={handleOnClick}></i>
+                    <i className="fad fa-bell" onClick={(e) => handleOnClick(e)}></i>
                         {count > 0 ? <span>{count >= 10 ? '+9' : count}</span> : ''}
                     <div>Thông báo</div>
                 </div>

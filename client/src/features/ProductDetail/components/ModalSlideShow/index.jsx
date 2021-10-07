@@ -26,7 +26,6 @@ const ModalSlideShow = () => {
         if(slideImage.length > 0) {
             var slideWidth = slideImage[0].clientWidth; 
             
-            console.log(slideWidth);
             setslideWidth(slideWidth);
             setindexImage(modalSlide.indexImage);
             setidActive(modalSlide.imageSlice[modalSlide.indexImage].id);

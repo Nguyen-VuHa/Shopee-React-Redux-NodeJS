@@ -14,7 +14,7 @@ const ContentCart = () => {
             const action = setTotalPrice(stateCart?.listCart);
             dispatch(action);
         }
-    }, [dispatch, stateCart?.listCart]);
+    }, [dispatch, stateCart]);
 
     return (
         <div className="content-cart" >

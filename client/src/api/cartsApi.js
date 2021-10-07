@@ -3,9 +3,9 @@ const { default: axiosClient } = require("./clientAxios");
 const cartsApi = {
     getCarts: (accessToken) => {
         const url =  `/api/carts`;
-        return axiosClient.get(url,{
+        return axiosClient.get(url, {
             headers: {
-                'Authorization':`Baeber ${accessToken}` 
+                'Authorization':`Bearer ${accessToken}` 
             } 
         });
     },
@@ -13,23 +13,23 @@ const cartsApi = {
         const url =  `/api/carts/add-item`;
         return axiosClient.post(url, JSON.stringify(objectData.data) , {
             headers: {
-                'Authorization':`Baeber ${objectData.accessToken}` 
+                'Authorization':`Bearer ${objectData.accessToken}` 
             } 
         });
     },
     plusCount: (accessToken, idCart) => {
         const url =  `/api/carts/plus/${idCart}`;
         return axiosClient.get(url, {
-            headers: {
-                'Authorization':`Baeber ${accessToken}` 
-            } 
-        });
+                headers: {
+                    'Authorization':`Bearer ${accessToken}` 
+                } 
+            });
     },
     minusCount: (accessToken, idCart) => {
         const url =  `/api/carts/minus/${idCart}`;
         return axiosClient.get(url ,{
             headers: {
-                'Authorization':`Baeber ${accessToken}` 
+                'Authorization':`Bearer ${accessToken}` 
             } 
         });
     },
@@ -37,7 +37,7 @@ const cartsApi = {
         const url =  `/api/carts/remove/${idCart}`;
         return axiosClient.get(url ,{
             headers: {
-                'Authorization':`Baeber ${accessToken}` 
+                'Authorization':`Bearer ${accessToken}` 
             } 
         });
     },

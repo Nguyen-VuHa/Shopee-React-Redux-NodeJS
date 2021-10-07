@@ -16,7 +16,7 @@ const Cart = () => {
     useEffect(() => {
         const action = getProductInCarts(accessToken);
         dispatch(action);
-    }, [dispatch, isShowCart]);
+    }, [dispatch, accessToken]);
 
     
     const handleClickImage = () => {
