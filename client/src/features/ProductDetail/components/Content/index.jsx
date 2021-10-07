@@ -1,20 +1,27 @@
+import { ToastContext } from 'context/toastContext';
 import { productImgDetailSelectors } from 'features/ProductDetail/productDetail';
 import $ from 'jquery';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ImageGaleryView from '../ImageGaleryView';
 import { setAllImage } from '../ModalSlideShow/modalShowSlice';
+import { v4 as uuidv4 } from 'uuid';
+import { addItemInCarts } from 'features/Cart/cartSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { openCart } from 'features/Cart/isShowCartSlice';
 
 const ContentDetail = (props) => {
     const { data } = props;
     const [countProduct, setcountProduct] = useState(1);
-    const dispatch = useDispatch();
+    const isLogin = useSelector((state) => state.isLogin);
+    const {dispatch} = useContext(ToastContext);
+    const disPatch = useDispatch();
    
     const stateImage = useSelector(productImgDetailSelectors.selectAll);
     
     useEffect(() => {
-        dispatch(setAllImage(stateImage.filter(id => id.Image_idProduct === data.idProduct)));
-    }, [dispatch , data, stateImage]);
+        disPatch(setAllImage(stateImage.filter(id => id.Image_idProduct === data.idProduct)));
+    }, [disPatch , data, stateImage]);
 
 
     useEffect(() => {
@@ -38,8 +45,33 @@ const ContentDetail = (props) => {
         setcountProduct(countProduct - 1);
     }
     
-    const handleAddToCart = () => {
-    
+    const handleAddToCart = async () => {
+        if(isLogin) {
+            var objData = {
+                data: {
+                    idProduct: data.idProduct,
+                    countProduct,
+                },
+                accessToken: localStorage.getItem('accessToken'),
+            }
+            const result = await disPatch(addItemInCarts(objData));
+            const messageResult = unwrapResult(result);
+            if(messageResult.status === 'success'){
+                disPatch(openCart());
+            }
+        }
+        else {
+            dispatch({
+                type: 'ADD_NOTIFICATION',
+                payload: {
+                    id: uuidv4(),
+                    type: 'ERROR',
+                    title: 'Authentication !',
+                    message: 'Bạn chưa đăng nhập! không thể thêm vào giỏ!',
+                    position: 'top-right'
+                }
+            });
+        }
     }
 
     return (

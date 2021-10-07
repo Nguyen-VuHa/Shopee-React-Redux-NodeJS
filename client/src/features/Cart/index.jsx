@@ -1,3 +1,4 @@
+import { getProductView } from 'features/Product/productSlice';
 import $ from 'jquery';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,8 +15,12 @@ const Cart = () => {
     const dispatch = useDispatch();
  
     useEffect(() => {
-        const action = getProductInCarts(accessToken);
-        dispatch(action);
+        if(accessToken) {
+            const actionCart = getProductInCarts(accessToken);
+            dispatch(actionCart);
+            const actionProduct = getProductView();
+            dispatch(actionProduct);
+        }
     }, [dispatch, accessToken]);
 
     

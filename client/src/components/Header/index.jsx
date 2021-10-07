@@ -7,12 +7,15 @@ import Images from 'constants/images';
 import { useDispatch, useSelector } from 'react-redux';
 import { openCart } from 'features/Cart/isShowCartSlice';
 import { setIsLogout } from 'constants/isLoginSlice';
+import { cartSelectors } from 'features/Cart/cartSlice';
 
 const Header = () => {
     const dropdownUserRef = useRef(null);
-    const stateCart = useSelector((state) => state.carts);
+    const stateCarts = useSelector(cartSelectors.selectAll);
     const stateLogin = useSelector((state) => state.isLogin);
+
     const [listNotify, setlistNotify] = useState([]);
+    
     const infoUser = JSON.parse(localStorage.getItem('info-user'));
     const dispath = useDispatch();
 
@@ -131,8 +134,8 @@ const Header = () => {
                                             className="far fa-shopping-cart" 
                                             onClick={() => handleOpenCart()}
                                         ></i>
-                                        {stateCart.listCart.length > 0 ? 
-                                            <span>{stateCart.listCart.length}</span>
+                                        { stateCarts.length > 0 ? 
+                                            <span>{stateCarts.length}</span>
                                          : ''}
                                             <div>Giỏ hàng</div>
                                     </div>

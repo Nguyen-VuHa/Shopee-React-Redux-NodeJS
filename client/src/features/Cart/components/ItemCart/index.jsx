@@ -1,47 +1,40 @@
 import { minusCarts, plusCarts, removeCarts } from 'features/Cart/cartSlice';
 import { closeCart } from 'features/Cart/isShowCartSlice';
-import { minusTotalPrice, plusTotalPrice } from 'features/Cart/totalPriceSlice';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { getProductById } from 'features/Product/productSlice';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 
 const ItemCart = (props) => {
     const { data } = props;
-    const [countProduct, setcountProduct] = useState(data.countProduct);
     const accessToken = localStorage.getItem('accessToken');
     const dispatch = useDispatch();
+    const productById = useSelector(getProductById(data.Carts_idProduct));
 
-    useEffect(() => {
-        setcountProduct(data.countProduct);
-    }, [data.countProduct]);
 
     const handleMinusCount = () => {
         if(accessToken) {
-            if(countProduct > 1)
+            if(data.countProduct > 1)
             {
-                setcountProduct(countProduct - 1);
                 const action = minusCarts({
                     accessToken,
-                    idCarts: data.id
+                    idCarts: data.id,
+                    countProduct: data.countProduct - 1,
                 });
                 dispatch(action);
-                const actionPlusTotal = minusTotalPrice(data.SANPHAM.price);
-                dispatch(actionPlusTotal);  
             }
         }
     }
 
     const handlePlusCount = () => {
         if(accessToken) {
-            setcountProduct(countProduct + 1);
             const action = plusCarts({
                 accessToken,
-                idCarts: data.id
+                idCarts: data.id,
+                countProduct: data.countProduct + 1,
             });
             dispatch(action);
-            const actionPlusTotal = plusTotalPrice(data.SANPHAM.price);
-            dispatch(actionPlusTotal);
         }
     }
     
@@ -52,8 +45,6 @@ const ItemCart = (props) => {
                 idCarts: data.id
             });
             dispatch(action);
-            const actionPlusTotal = plusTotalPrice(data.SANPHAM.price * countProduct);
-            dispatch(actionPlusTotal);
         }
     }
 
@@ -68,17 +59,17 @@ const ItemCart = (props) => {
                 className="image-pd" 
                 onClick={handleClickImage}
             >
-                <Link to={`/product-page/${data.SANPHAM.nameProduct.replaceAll(' ', '-')}`}>
-                    <img src={data.SANPHAM.imageUrl} alt="NotImage"/>
+                <Link to={`/product-page/${productById?.nameProduct.replaceAll(' ', '-')}`}>
+                    <img src={productById?.imageUrl} alt="NotImage"/>
                 </Link>
             </div>
             <div className="content-pd">
-                <div className="name-pd">{data.SANPHAM.nameProduct}</div>
-                <div className="price-pd">{data.SANPHAM.price.toLocaleString()} đ</div>
+                <div className="name-pd">{productById?.nameProduct}</div>
+                <div className="price-pd">{productById?.price.toLocaleString()} đ</div>
                 <div className="group-btn-count">
                     <div className="btn-minus">
                         <i 
-                            className={countProduct > 1 ? "fal fa-minus" : "fal fa-minus hide"}
+                            className={data.countProduct > 1 ? "fal fa-minus" : "fal fa-minus hide"}
                             onClick={() => handleMinusCount()}
                         ></i>
                         </div>
@@ -88,7 +79,7 @@ const ItemCart = (props) => {
                             onClick={() => handlePlusCount()}
                         ></i>
                     </div>
-                    <span>{countProduct}</span>
+                    <span>{data.countProduct}</span>
                 </div>
             </div>
             <div 

@@ -8,9 +8,7 @@ class CartController {
             where: {
                 Carts_idUser: idUser
             },
-            include: [
-                Products
-            ]
+            attributes: ['id', 'countProduct', 'Carts_idProduct']
         });
 
         res.json(data);
@@ -19,6 +17,7 @@ class CartController {
     async setItemCart (req, res) {
         const idUser = req.userId;
         const { idProduct, countProduct } = req.body;
+        var role = '';
         const checkedItem = await Carts.findOne({
             where: {
                 Carts_idProduct: idProduct,
@@ -29,16 +28,28 @@ class CartController {
         if(checkedItem) {
             checkedItem.countProduct += countProduct;
 
-            checkedItem.save();
+            await checkedItem.save();
+            role = 'Update';
         }
         else {
-            Carts.create({
+            await Carts.create({
                 countProduct: countProduct,
                 Carts_idUser: idUser,
                 Carts_idProduct: idProduct,
             });
+            role = 'Insert';
         }
-        res.json({status: 'success'});
+      
+        var data = await Carts.findOne({
+            where: {
+                Carts_idUser: idUser,
+                Carts_idProduct: idProduct,
+            },
+            attributes: ['id', 'countProduct', 'Carts_idProduct']
+        });
+        
+
+        res.json({status: 'success', data, role});
     }
 
     async plusCart (req, res) {
@@ -85,16 +96,7 @@ class CartController {
             }
         })
 
-        const data = await Carts.findAll({
-            where: {
-                Carts_idUser: idUser
-            },
-            include: [
-                Products
-            ]
-        });
-        console.log(data);
-        res.json({status: 'success', data});
+        res.json({status: 'success'});
     }
 }
 

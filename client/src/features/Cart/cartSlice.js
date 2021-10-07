@@ -1,12 +1,6 @@
 import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 import cartsApi from "api/cartsApi";
 
-var initialState = {
-    listCart: [],
-    statusMesage: '',
-    loading: false,
-    error: '',
-}
 
 export const getProductInCarts = createAsyncThunk('GET_PRODUCT_CART', async (thunkApi) => {
     const stateReponse = await cartsApi.getCarts(thunkApi);
@@ -15,37 +9,60 @@ export const getProductInCarts = createAsyncThunk('GET_PRODUCT_CART', async (thu
 
 export const addItemInCarts = createAsyncThunk('ADD_ITEM_CART', async (thunkApi) => {
     const stateReponse = await cartsApi.addCarts(thunkApi);
-    return stateReponse;
+    if(stateReponse.role === 'Update') {
+        return {
+            status: stateReponse.status,
+            role: stateReponse.role,
+            id: stateReponse.data.id,
+            changes: {  
+                countProduct: stateReponse.data.countProduct 
+            },
+        };
+    }
+    else {
+        return {
+            status: stateReponse.status,
+            data: stateReponse.data,
+        };
+    }
+    
 })
 
-export const plusCarts = createAsyncThunk('PLUS_COUNT_CART', async (thunkApi) => {
-    const stateReponse = await cartsApi.plusCount(thunkApi.accessToken, thunkApi.idCarts);
-    return stateReponse;
+export const plusCarts = createAsyncThunk('PLUS_COUNT_CART', async ({idCarts, accessToken, countProduct }) => {
+    const stateReponse = await cartsApi.plusCount(accessToken, idCarts);
+    return { 
+        stateReponse,
+        id: idCarts,
+        countProduct,
+    };
 })
 
-export const minusCarts = createAsyncThunk('MINUS_COUNT_CART', async (thunkApi) => {
-    const stateReponse = await cartsApi.minusCount(thunkApi.accessToken, thunkApi.idCarts);
-    return stateReponse;
+export const minusCarts = createAsyncThunk('MINUS_COUNT_CART', async ({idCarts, accessToken, countProduct }) => {
+    const stateReponse = await cartsApi.minusCount(accessToken, idCarts);
+    return { 
+        stateReponse,
+        id: idCarts,
+        countProduct,
+    };
 })
 
 export const removeCarts = createAsyncThunk('REMOVE_ITEM_CART', async (thunkApi) => {
-    const messageRemoveItem = await cartsApi.removeItemCarts(thunkApi.accessToken, thunkApi.idCarts);
-    return messageRemoveItem;
+    const stateReponse = await cartsApi.removeItemCarts(thunkApi.accessToken, thunkApi.idCarts);
+    return { status: stateReponse.status, id: thunkApi.idCarts };
 })
 
 const cartAdapter = createEntityAdapter({
-    selectId: (cart) => cart.idCarts,
+    selectId: (cart) => cart.id,
 })
 
-const cartApi = createSlice({
+const cartSlice = createSlice({
     name: 'carts',
-    initialState: cartAdapter.getInitialState(initialState),
-    reducers: {
-        addItemCart: (state, action) => {
-            console.log(state.listCart, action);
-            return state;
-        }
-    },
+    initialState: cartAdapter.getInitialState({
+        loading: false,
+        error: '',
+
+    }),
+    reducers: {},
     extraReducers: {
         // GET ITEM PRODUCT IN CART
         [getProductInCarts.pending]: (state) => {
@@ -57,8 +74,8 @@ const cartApi = createSlice({
         },
         [getProductInCarts.fulfilled]: (state, action) => {
             state.loading = false;
+            state.error = '';
             cartAdapter.setAll(state, action.payload);
-            state.statusMesage = 'OK';
         },
         // ADD ITEM CART
         [addItemInCarts.pending]: (state) => {
@@ -68,9 +85,15 @@ const cartApi = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        [addItemInCarts.fulfilled]: (state, action) => {
+        [addItemInCarts.fulfilled]: (state, { payload }) => {
             state.loading = false;
-            state.statusMesage = action.payload;
+            state.error = '';
+            if(payload.role === 'Update') {
+                cartAdapter.updateOne(state, { id: payload.id, changes: payload.changes });
+            }
+            else {
+                cartAdapter.addOne(state, payload.data);
+            }
         },
         // PLUS COUNT ITEM CART
         [plusCarts.pending]: (state) => {
@@ -80,9 +103,10 @@ const cartApi = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        [plusCarts.fulfilled]: (state, action) => {
+        [plusCarts.fulfilled]: (state, { payload }) => {
             state.loading = false;
-            state.statusMesage = action.payload;
+            state.error = '';
+            cartAdapter.updateOne(state, { id: payload.id, changes: { countProduct: payload.countProduct }});
         },
         // MINUS COUNT ITEM CART 
         [minusCarts.pending]: (state) => {
@@ -92,9 +116,10 @@ const cartApi = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        [minusCarts.fulfilled]: (state, action) => {
+        [minusCarts.fulfilled]: (state, { payload }) => {
             state.loading = false;
-            state.statusMesage = action.payload;
+            state.error = '';
+            cartAdapter.updateOne(state, { id: payload.id, changes: { countProduct: payload.countProduct }});
         },
         // REMOVE ITEM CART
         [removeCarts.pending]: (state) => {
@@ -104,18 +129,17 @@ const cartApi = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
-        [removeCarts.fulfilled]: (state, action) => {
+        [removeCarts.fulfilled]: (state, { payload }) => {
             state.loading = false;
-            state.statusMesage = action.payload.status;
-            state.listCart = action.payload.data;
+            state.error = '';
+            cartAdapter.removeOne(state, payload.id);
         },
     }
 })
 
 export const cartSelectors = cartAdapter.getSelectors(
-    (state) => state.cart
+    (state) => state.carts
 )
 
-const  { reducer, actions } = cartApi;
-export const { addItemCart } = actions;
+const  { reducer } = cartSlice;
 export default reducer;

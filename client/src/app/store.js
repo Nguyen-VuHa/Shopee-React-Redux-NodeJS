@@ -1,13 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import registerReducer from 'features/Auth/authSlice';
-import { default as cartReducers, default as listCartsReducer } from 'features/Cart/cartSlice';
 import isShowCartReducers from 'features/Cart/isShowCartSlice';
-import totalPriceCartReducers from 'features/Cart/totalPriceSlice';
 import productViewReducers from 'features/Product/productSlice';
 import productDetailReducers from 'features/ProductDetail/productDetail';
 import homepageReducers from 'features/HomePage/homepageSlice';
 import modalSlideShow from 'features/ProductDetail/components/ModalSlideShow/modalShowSlice';
 import isLoginReducer from 'constants/isLoginSlice';
+import cartsReducer from 'features/Cart/cartSlice';
 
 const rootReducer = {
     registers: registerReducer,
@@ -16,12 +15,8 @@ const rootReducer = {
     listProductDetail: productDetailReducers,
     modalSlide: modalSlideShow,
     isLogin: isLoginReducer,
-    
-    listCarts: listCartsReducer,
-    carts: cartReducers, 
-    totalPriceCart: totalPriceCartReducers,
+    carts: cartsReducer,
     isShowCart: isShowCartReducers,
-   
 }
 
 const store = configureStore({

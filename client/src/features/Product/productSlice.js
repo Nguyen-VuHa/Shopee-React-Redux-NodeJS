@@ -80,6 +80,7 @@ const productViewSlice = createSlice({
 
 export const productViewSelectors = productViewAdapter.getSelectors((state) => state.productView);
 export const listNameSelectors = productViewAdapter.getSelectors((state) => state.productView.listname);
+export const getProductById = (idProduct) => state => productViewSelectors.selectById(state, idProduct);
 
 const  { reducer } = productViewSlice;
 export default reducer;
