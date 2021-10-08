@@ -73,7 +73,7 @@ class ProductController {
                 var uploadResponse = await cloudinary.uploader.upload(arrayImage[i], {
                     upload_preset: 'product_image',
                 });
-                arrayUrl.push(uploadResponse.url);
+                arrayUrl.push(uploadResponse.secure_url);
             }
 
             await Product.create({
@@ -152,7 +152,7 @@ class ProductController {
                     const uploadResponse = await cloudinary.uploader.upload(arrayImage[index], {
                         upload_preset: 'product_image',
                     });
-                    arrayUrl.push(uploadResponse.url);
+                    arrayUrl.push(uploadResponse.secure_url);
                 }
             }
 

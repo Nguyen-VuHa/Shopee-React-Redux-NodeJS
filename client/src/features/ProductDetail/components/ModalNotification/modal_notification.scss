@@ -46,3 +46,10 @@
         padding: 10px 25px;
     }
 }
+
+@media screen and (max-width: 767px) { 
+    .modal-noti-content {
+        margin: 0 15px;
+        padding: 50px 15px;
+    }
+}

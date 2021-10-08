@@ -30,7 +30,7 @@ class categoryController {
     
                 let category = await Category.create({
                     nameCategory: nameCategory,
-                    imageUrl: uploadResponse?.url,
+                    imageUrl: uploadResponse?.secure_url,
                 });
         
                 for (var i in listProduct) {
@@ -241,7 +241,7 @@ class categoryController {
                     const uploadResponse = await cloudinary.uploader.upload(imageCategory, {
                         upload_preset: 'category_image',
                     });
-                    imageUrl = uploadResponse.url;
+                    imageUrl = uploadResponse.secure_url;
                 }
                 else
                     imageUrl = '';
