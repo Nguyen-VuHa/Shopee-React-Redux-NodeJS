@@ -162,23 +162,32 @@
     }
 
     .product-store {
-        & .pd-store-banner {
+        .pd-store-banner {
             grid-template-columns: 1fr;
         }
 
-        & .pd-store-content {
+        .pd-store-content {
             grid-template-columns: 1fr;
 
-            & .content-product {
-                grid-template-columns: 1fr;
-                grid-gap: 20px;
+            .content-product {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 260px auto;
+                grid-gap: 10px;
                 
-                & .product-item {
-                    min-height: 350px;
+                .product-item {
+                    min-height: 0;
                     height: auto;
 
-                    & .image-pd {
-                        height: 300px;
+                    .image-pd {
+                        height: 150px;
+                    }
+
+                    .info-pd .name-pd {
+                        height: auto;
+                    }
+
+                    .info-pd .price {
+                        padding: 15px 0;
                     }
                 }
             }
