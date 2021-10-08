@@ -9,12 +9,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { addItemInCarts } from 'features/Cart/cartSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { openCart } from 'features/Cart/isShowCartSlice';
+import { ModalProductContext } from 'context/modalProductContext';
 
 const ContentDetail = (props) => {
     const { data } = props;
     const [countProduct, setcountProduct] = useState(1);
     const isLogin = useSelector((state) => state.isLogin);
     const {dispatch} = useContext(ToastContext);
+    const {dispatchModal} = useContext(ModalProductContext);
     const disPatch = useDispatch();
    
     const stateImage = useSelector(productImgDetailSelectors.selectAll);
@@ -74,6 +76,17 @@ const ContentDetail = (props) => {
         }
     }
 
+    const handlePayProduct = () => {
+        dispatchModal({
+            type: 'ADD_MODAL_CONTEXT',
+            payload: {
+                status : true,   
+                title: 'Hiện tại, chúng tôi chưa tích hợp thanh toán trực tiếp!',
+                message: 'Bạn có thể liên hệ trực tiếp shop để được tư vấn hoặc đặt hàng qua Shopee',
+            }
+        })
+    }
+
     return (
         <>
             <div className="product-detail">
@@ -100,7 +113,10 @@ const ContentDetail = (props) => {
                             className="btn btn-cart"
                             onClick={() => handleAddToCart()}
                         >Thêm vào giỏ hàng</div>
-                        <div className="btn btn-buy">Mua Ngay</div>
+                        <div 
+                            className="btn btn-buy"
+                            onClick={() => handlePayProduct()}
+                        >Mua Ngay</div>
                     </div>
                 </div>
             </div>

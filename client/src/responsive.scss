@@ -62,6 +62,10 @@
   @media screen and (max-width: 767px) {
     html,body{width:100%;overflow-x:hidden;}
 
+    .btn-scroll-top {
+        bottom: 50px;
+    }
+
     .md .mini-cart {
         max-width: 100%;
     }
@@ -170,10 +174,11 @@
                 grid-gap: 20px;
                 
                 & .product-item {
-                    height: 350px;
+                    min-height: 350px;
+                    height: auto;
 
                     & .image-pd {
-                        height: 260px;
+                        height: 300px;
                     }
                 }
             }
@@ -205,7 +210,7 @@
 
         .pdt-item .group-button {
             position: fixed;
-            bottom: 0;
+            bottom: 10px;
             left: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
