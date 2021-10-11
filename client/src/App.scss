@@ -22,6 +22,7 @@ ul {
     border-radius: 50%;
     cursor: pointer;
     transition: all .4s ease;
+    z-index: 10;
 
     &:hover {
       opacity: 0.8;
@@ -61,7 +62,8 @@ ul {
   border-radius: 50%;
   cursor: pointer;
   transition: all .4s ease;
-
+  z-index: 10;
+  
   &:hover {
     opacity: 0.8;
   }
