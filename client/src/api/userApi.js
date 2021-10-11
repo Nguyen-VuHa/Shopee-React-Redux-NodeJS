@@ -11,11 +11,11 @@ const userApi = {
     },
     postMessage: (data, accesToken) => {
         const url = `/api/create-message`;
-        return axiosClient.post(url, {
+        return axiosClient.post(url, JSON.stringify(data) , {
             headers: {
                 'Authorization':`Bearer ${accesToken}` 
             } 
-        }, JSON.stringify(data));
+        });
     },
     getIdAdmin: () => {
         const url = `/api/get-id-admin`;
