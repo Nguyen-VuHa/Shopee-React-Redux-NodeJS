@@ -1,13 +1,21 @@
 const { default: axiosClient } = require("./clientAxios");
 
 const userApi = {
-    getMessage: (senderId, receiverId) => {
+    getMessage: (senderId, receiverId, accesToken) => {
         const url =`/api/get-message/${senderId}/${receiverId}`;
-        return axiosClient.get(url);
+        return axiosClient.get(url, {
+            headers: {
+                'Authorization':`Bearer ${accesToken}` 
+            } 
+        });
     },
-    postMessage: (data) => {
+    postMessage: (data, accesToken) => {
         const url = `/api/create-message`;
-        return axiosClient.post(url, JSON.stringify(data));
+        return axiosClient.post(url, {
+            headers: {
+                'Authorization':`Bearer ${accesToken}` 
+            } 
+        }, JSON.stringify(data));
     },
     getIdAdmin: () => {
         const url = `/api/get-id-admin`;

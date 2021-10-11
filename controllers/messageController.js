@@ -19,7 +19,7 @@ class MessageController {
             ]
         });
 
-        res.json(data);
+        res.json({status: 'success', data: data});
     }
 
     async createMessage (req, res) {

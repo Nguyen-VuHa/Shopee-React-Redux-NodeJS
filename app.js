@@ -30,9 +30,10 @@ if(process.env.NODE_ENV === "appstore") {
 }
 
 var http = require('http').createServer(app);
-const io = require('socket.io')(http, {
+const io = require('socket.io')(8900, {
     cors: {
-        origin: "https://bibi-cosmetic-store.herokuapp.com/"
+        origin: "http://bibi-cosmetic-store.herokuapp.com/",
+        //origin: "http://localhost:3000"
     }
 });
 
@@ -55,7 +56,7 @@ io.on('connection', (socket) => {
     console.log('User connected.');
     socket.on("addUser", userId => {
         addUser(userId, socket.id);
-        io.emit('getUsers', users);
+        socket.emit('getUsers', users);
     });
 
     socket.on('sendMessage', ({senderId, receiverId, text}) => {
@@ -69,7 +70,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected');
         removeUser(socket.id);
-        io.emit('getUsers', users);
+        socket.emit('getUsers', users);
     });
 });
 

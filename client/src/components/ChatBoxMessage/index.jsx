@@ -13,16 +13,16 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
     const [message, setMessage] = useState([]);
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const userInfo = JSON.parse(localStorage.getItem('info-user'));
-    const socketRef = useRef(null);
+    const accessToken = localStorage.getItem('accessToken');
+    const socketRef = useRef(io('ws://localhost:8900'));
     const scrollRef = useRef(null);
     const textAreaRef = useRef(null);
     const stateLogin = useSelector((state) => state.isLogin);
 
-    
-
     useEffect(() => {
         if(stateLogin.isLogin) {
-            socketRef.current = io('https://bibi-cosmetic-store.herokuapp.com/');
+            socketRef.current = io('http://bibi-cosmetic-store.herokuapp.com/');
+            // socketRef.current = io('ws://localhost:8900');
             socketRef.current.on('getMessage', data => {
                 var keyEncode = process.env.REACT_ENCODE_VALUE_MESSAGE || '9430516975';
                 var messageReponse = data.text.replace(keyEncode, '');
@@ -35,22 +35,23 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
                 })
             });
         }
-       
-    }, [stateLogin]);
+    }, []);
 
     useEffect(() => {
         const fectchMessage = async () => {
-            return await userApi.getMessage(userInfo.id, idAdmin);
+            return await userApi.getMessage(userInfo.id, idAdmin, accessToken);
         }
         
-        if(idAdmin)
+        if(showMessage)
         {
             fectchMessage().then(value => {
-                setMessage(value);
+                setMessage(value.data);
                 scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }).catch((err) => {
+                console.log(err);
             });
         }
-    }, [idAdmin]);
+    }, [showMessage]);
 
     useEffect(() => {
         arrivalMessage && setMessage([...message, arrivalMessage]);
@@ -83,7 +84,7 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
                     conversation_id: idAdmin,
                     messageType: 'TEXT',
                     messageText: textMessage,
-                })
+                }, accessToken);
                 setMessage([...message, {
                     messageType: "TEXT",
                     messageText: textMessage,

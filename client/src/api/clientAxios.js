@@ -29,17 +29,18 @@ axiosClient.interceptors.response.use(
         },async (error) => {
         // Handle errors
         const originalRequest = error.config;
-        if (error.response.status === 403  && !originalRequest._retry)
+        if (error.response.status === 403)
         {
-            
             originalRequest._retry = true;
             const refreshToken = { 
                 refreshToken: localStorage.getItem('refreshToken') 
             };
+
             const data = await axiosClient.post(
                 process.env.REACT_APP_API_URL + 'auth/refresh-token',
                 refreshToken
             )
+        
             delete axios.defaults.headers.common['Authorization'];
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.accessToken;
             localStorage.setItem('accessToken', data.accessToken);
