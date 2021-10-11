@@ -1,3 +1,4 @@
+import ChatBoxMessage from 'components/ChatBoxMessage';
 import Footer from 'components/Footer';
 import Header from 'components/Header';
 import LoadingPage from 'components/LoadingPage';
@@ -8,12 +9,12 @@ import Auth from 'features/Auth';
 import Cart from 'features/Cart';
 import ProductStore from 'features/Product';
 import ProductDetail from 'features/ProductDetail';
-import React, { Suspense, useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.scss';
 import './responsive.scss';
-
+import userApi from 'api/userApi';
 
 const HomePage = React.lazy(() => import('features/HomePage')); 
 
@@ -22,10 +23,19 @@ function App() {
 	const stateLogin = useSelector((state) => state.isLogin);
 	const accessToken = localStorage.getItem('accessToken');
 	const dispatch = useDispatch();
+	const [showMessage, setshowMessage] = useState(false);
+	const [idAdmin, setidAdmin] = useState('');
 
+	const getIdAdmin = async () => {
+		return await userApi.getIdAdmin();
+	} 
 	useEffect(() => {
 		if(accessToken) {
 			dispatch(setIsLogin());
+			getIdAdmin().then(data => {
+				setidAdmin(data.idAdmin);
+			})
+			
 		}
 	}, [dispatch, accessToken]);
 
@@ -42,6 +52,10 @@ function App() {
 
 	const handleScrollTop = () => {
 		window.scrollTo(0, 0);
+	}
+
+	const handleConversationAdmin = () => {
+		setshowMessage(!showMessage);
 	}
 
 	return (
@@ -85,6 +99,21 @@ function App() {
 			>
 				<i className="fas fa-arrow-alt-up"></i>
 			</div>
+			{ accessToken ?
+				<>
+					<div 
+						className="btn-message-box"
+						onClick={() => handleConversationAdmin()}
+					>
+						<i className="fas fa-comments"></i>
+					</div>
+					<ChatBoxMessage 
+						showMessage={showMessage} 
+						idAdmin={idAdmin} 
+						setshowMessage={setshowMessage}
+					/> 
+				</>	: ''}
+			
 		</>
 	
 	);

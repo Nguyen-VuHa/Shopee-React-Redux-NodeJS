@@ -65,6 +65,7 @@ class AuthController {
             await found.save();
 
             res.json({status: 'success', accessToken: accessToken, refreshToken: refreshToken, infoUser: {
+                id: found.id_user,
                 email: found.email,
                 fullname: found.fullname,
                 role: found.role,

@@ -8,11 +8,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openCart } from 'features/Cart/isShowCartSlice';
 import { setIsLogout } from 'constants/isLoginSlice';
 import { cartSelectors } from 'features/Cart/cartSlice';
+import { io } from 'socket.io-client';
 
 const Header = () => {
     const dropdownUserRef = useRef(null);
     const stateCarts = useSelector(cartSelectors.selectAll);
     const stateLogin = useSelector((state) => state.isLogin);
+    const socketRef = useRef(io('https://bibi-cosmetic-store.herokuapp.com/'));
 
     const [listNotify, setlistNotify] = useState([]);
     
@@ -42,6 +44,7 @@ const Header = () => {
     const handleLogout = () => {
         localStorage.clear();
         dispath(setIsLogout());
+        socketRef.current.disconnect();
     }
 
     useEffect(() => {

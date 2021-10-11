@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'swiper/components/navigation/navigation.scss';
 import 'swiper/components/pagination/pagination.scss';
 import 'swiper/components/scrollbar/scrollbar.scss';
+import 'simplebar';
 import 'simplebar/dist/simplebar.min.css';
 import 'swiper/swiper.scss';
 import App from './App';

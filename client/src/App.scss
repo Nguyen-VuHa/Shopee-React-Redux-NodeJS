@@ -10,7 +10,7 @@ ul {
 
 .btn-scroll-top {
     position: fixed;
-    bottom: 30px;
+    bottom: 100px;
     right: 30px;
     width: 60px;
     height: 60px;
@@ -45,4 +45,40 @@ ul {
 
 .btn-scroll-top.hide {
   display: none;
+}
+
+.btn-message-box {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: var(--color-layout);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .4s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:hover::after {
+    content: 'Liên Hệ Trực Tiếp';
+    position: absolute;
+    left: -261%;
+    padding: 10px 15px;
+    background: rgba(188 , 76, 42, 0.9);
+    color: #fff;
+    border-radius: 5px;
+   
+  }
+
+  i {
+    font-size: 25px;
+  }
+
 }

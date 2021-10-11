@@ -7,6 +7,7 @@ import homepageReducers from 'features/HomePage/homepageSlice';
 import modalSlideShow from 'features/ProductDetail/components/ModalSlideShow/modalShowSlice';
 import isLoginReducer from 'constants/isLoginSlice';
 import cartsReducer from 'features/Cart/cartSlice';
+import userChatReducers from 'components/ChatBoxMessage/reciverUserSlice';
 
 const rootReducer = {
     registers: registerReducer,
@@ -17,6 +18,7 @@ const rootReducer = {
     isLogin: isLoginReducer,
     carts: cartsReducer,
     isShowCart: isShowCartReducers,
+    userChat: userChatReducers,
 }
 
 const store = configureStore({
