@@ -34,6 +34,7 @@ const io = require('socket.io')(http, {
     cors: {
         origin: "https://bibi-cosmetic-store.herokuapp.com/",
         //origin: "http://localhost:3000"
+        methods: ["GET", "POST"],
     }
 });
 
