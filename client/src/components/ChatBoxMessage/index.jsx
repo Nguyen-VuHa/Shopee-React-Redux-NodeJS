@@ -15,14 +15,14 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
     const userInfo = JSON.parse(localStorage.getItem('info-user'));
     const accessToken = localStorage.getItem('accessToken');
     // const socketRef = useRef(io('ws://localhost:8900'));
-    const socketRef = useRef(io('http://bibi-cosmetic-store.herokuapp.com/'));
+    const socketRef = useRef(io('https://bibi-cosmetic-store.herokuapp.com/'));
     const scrollRef = useRef(null);
     const textAreaRef = useRef(null);
     const stateLogin = useSelector((state) => state.isLogin);
 
     useEffect(() => {
         if(stateLogin.isLogin) {
-            socketRef.current = io('http://bibi-cosmetic-store.herokuapp.com/');
+            socketRef.current = io('https://bibi-cosmetic-store.herokuapp.com/');
             // socketRef.current = io('ws://localhost:8900');
             socketRef.current.on('getMessage', data => {
                 var keyEncode = process.env.REACT_ENCODE_VALUE_MESSAGE || '9430516975';
