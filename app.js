@@ -32,7 +32,7 @@ if(process.env.NODE_ENV === "appstore") {
 var http = require('http').createServer(app);
 const io = require('socket.io')(http, {
     cors: {
-        origin: "https://bibi-cosmetic-store.herokuapp.com/",
+        origin: "http://bibi-cosmetic-store.herokuapp.com/",
         //origin: "http://localhost:3000"
     }
 });
