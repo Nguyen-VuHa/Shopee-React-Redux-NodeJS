@@ -14,7 +14,8 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const userInfo = JSON.parse(localStorage.getItem('info-user'));
     const accessToken = localStorage.getItem('accessToken');
-    const socketRef = useRef(io('ws://localhost:8900'));
+    // const socketRef = useRef(io('ws://localhost:8900'));
+    const socketRef = useRef(io('http://bibi-cosmetic-store.herokuapp.com/'));
     const scrollRef = useRef(null);
     const textAreaRef = useRef(null);
     const stateLogin = useSelector((state) => state.isLogin);
