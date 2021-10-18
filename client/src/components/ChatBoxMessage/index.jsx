@@ -15,26 +15,26 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
     const userInfo = JSON.parse(localStorage.getItem('info-user'));
     const accessToken = localStorage.getItem('accessToken');
     // const socketRef = useRef(io('ws://localhost:8900'));
-    const socketRef = useRef(io('https://bibi-cosmetic-store.herokuapp.com/'));
+    // const socketRef = useRef(io('https://bibi-cosmetic-store.herokuapp.com/'));
     const scrollRef = useRef(null);
     const textAreaRef = useRef(null);
     const stateLogin = useSelector((state) => state.isLogin);
 
     useEffect(() => {
         if(stateLogin.isLogin) {
-            socketRef.current = io('https://bibi-cosmetic-store.herokuapp.com/');
+            // socketRef.current = io('https://bibi-cosmetic-store.herokuapp.com/');
             // socketRef.current = io('ws://localhost:8900');
-            socketRef.current.on('getMessage', data => {
-                var keyEncode = process.env.REACT_ENCODE_VALUE_MESSAGE || '9430516975';
-                var messageReponse = data.text.replace(keyEncode, '');
-                var decodeMessage = Buffer.from(messageReponse, 'base64').toString('utf8');
-                setArrivalMessage({
-                    messageType: "TEXT",
-                    messageText: decodeMessage,
-                    createdAt: Date.now(),
-                    sender_id: data.senderId,
-                })
-            });
+            // socketRef.current.on('getMessage', data => {
+            //     var keyEncode = process.env.REACT_ENCODE_VALUE_MESSAGE || '9430516975';
+            //     var messageReponse = data.text.replace(keyEncode, '');
+            //     var decodeMessage = Buffer.from(messageReponse, 'base64').toString('utf8');
+            //     setArrivalMessage({
+            //         messageType: "TEXT",
+            //         messageText: decodeMessage,
+            //         createdAt: Date.now(),
+            //         sender_id: data.senderId,
+            //     })
+            // });
         }
     }, []);
 
@@ -60,10 +60,10 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
 
     useEffect(() => {
         if(stateLogin.isLogin) {
-            socketRef.current.emit('addUser', userInfo.id);
-            socketRef.current.on('getUsers', users => {
-                // console.log(users);
-            });
+            // socketRef.current.emit('addUser', userInfo.id);
+            // socketRef.current.on('getUsers', users => {
+            //     // console.log(users);
+            // });
         }
     }, []);
 
@@ -75,11 +75,11 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
                 var rdIndex = Math.floor(Math.random() * endCodeMessage.length);
                 var keyEncode = process.env.REACT_ENCODE_VALUE_MESSAGE || '9430516975';
                 var messageSend = endCodeMessage.substr(0, rdIndex) + keyEncode + endCodeMessage.substr(rdIndex);
-                socketRef.current.emit('sendMessage', {
-                    senderId: userInfo.id,
-                    receiverId: idAdmin,
-                    text: messageSend,
-                });
+                // socketRef.current.emit('sendMessage', {
+                //     senderId: userInfo.id,
+                //     receiverId: idAdmin,
+                //     text: messageSend,
+                // });
                 userApi.postMessage({
                     sender_id: userInfo.id,
                     conversation_id: idAdmin,
@@ -111,7 +111,7 @@ const ChatBoxMessage = ({ idAdmin, showMessage, setshowMessage }) => {
     return (
         <div className={showMessage ? "chat-box-message show" : "chat-box-message hide"}>
             <div className="card-box">
-                <ChatBoxHeader socketRef={socketRef} setshowMessage={setshowMessage}/>
+                <ChatBoxHeader setshowMessage={setshowMessage}/>
                 <div 
                     id="card-message"
                     className="card-message" 

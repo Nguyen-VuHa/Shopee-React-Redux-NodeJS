@@ -14,7 +14,7 @@ const Header = () => {
     const dropdownUserRef = useRef(null);
     const stateCarts = useSelector(cartSelectors.selectAll);
     const stateLogin = useSelector((state) => state.isLogin);
-    const socketRef = useRef(io('https://bibi-cosmetic-store.herokuapp.com/'));
+    // const socketRef = useRef(io('https://bibi-cosmetic-store.herokuapp.com/'));
     // const socketRef = useRef(io('ws://localhost:8900'));
 
     const [listNotify, setlistNotify] = useState([]);
@@ -45,7 +45,7 @@ const Header = () => {
     const handleLogout = () => {
         localStorage.clear();
         dispath(setIsLogout());
-        socketRef.current.disconnect();
+        // socketRef.current.disconnect();
     }
 
     useEffect(() => {
